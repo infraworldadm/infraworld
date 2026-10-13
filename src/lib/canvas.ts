@@ -8,9 +8,12 @@ export function dotField(cv: HTMLCanvasElement, opt: FieldOpts, reduced: boolean
   if (!x) return () => {};
   let W = 0, H = 0, run = true, alive = true, raf = 0, t = 0;
   let mx = -9, my = -9, tmx = -9, tmy = -9;
-  const D = Math.min(window.devicePixelRatio || 1, 2);
+  const D = Math.min(window.devicePixelRatio || 1, window.matchMedia("(pointer:coarse)").matches ? 1.5 : 2);
+  let lastW = -1, lastH = -1;
   const size = () => {
     const b = cv.getBoundingClientRect();
+    if (b.width === lastW && b.height === lastH) return;
+    lastW = b.width; lastH = b.height;
     W = b.width; H = b.height; cv.width = W * D; cv.height = H * D; x.setTransform(D, 0, 0, D, 0, 0);
   };
   size();
@@ -77,8 +80,9 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
   if (!x) return () => {};
   let W = 0, H = 0, s = 60, run = true, alive = true, raf = 0;
   let mx = 0, my = 0, tmx = 0, tmy = 0;
-  const D = Math.min(window.devicePixelRatio || 1, 2);
-  const size = () => { const b = cv.getBoundingClientRect(); W = b.width; H = b.height; cv.width = W * D; cv.height = H * D; s = Math.min(W * 0.115, H * 0.17); };
+  const D = Math.min(window.devicePixelRatio || 1, window.matchMedia("(pointer:coarse)").matches ? 1.5 : 2);
+  let lastW = -1, lastH = -1;
+  const size = () => { const b = cv.getBoundingClientRect(); if (b.width === lastW && b.height === lastH) return; lastW = b.width; lastH = b.height; W = b.width; H = b.height; cv.width = W * D; cv.height = H * D; s = Math.min(W * 0.115, H * 0.17); };
   size();
   window.addEventListener("resize", size);
   const io = new IntersectionObserver(([e]) => { run = e.isIntersecting; });

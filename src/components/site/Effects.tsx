@@ -20,13 +20,16 @@ export function Effects() {
   useEffect(() => {
     const RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const FINE = window.matchMedia("(pointer:fine)").matches;
+    const MOBILE = !FINE || window.innerWidth < 760;
     const cleanups: (() => void)[] = [];
     const intervals: number[] = [];
     gsap.registerPlugin(ScrollTrigger);
+    // Mobile: ignore address-bar show/hide resizes (they re-layout every trigger and cause jank).
+    ScrollTrigger.config({ ignoreMobileResize: true });
 
     /* ---- smooth scroll ---- */
     let lenis: Lenis | null = null;
-    if (!RM) {
+    if (!RM && !MOBILE) {
       lenis = new Lenis({ duration: 1.25, easing: (t) => 1 - Math.pow(1 - t, 4), wheelMultiplier: 0.9 });
       (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
       lenis.on("scroll", ScrollTrigger.update);
@@ -134,10 +137,10 @@ export function Effects() {
       gsap.to(".fc3", { y: -7, duration: 4.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
 
       ScrollTrigger.batch(".rv", {
-        start: "top 90%",
+        start: MOBILE ? "top 95%" : "top 90%",
         once: true,
         onEnter: (b) => {
-          gsap.from(b, { y: 60, opacity: 0.2, duration: 1.3, ease: "expo.out", stagger: 0.09, clearProps: "transform,opacity" });
+          gsap.from(b, { y: MOBILE ? 32 : 60, opacity: 0.2, duration: MOBILE ? 0.9 : 1.3, ease: "expo.out", stagger: 0.09, clearProps: "transform,opacity" });
           (b as HTMLElement[]).forEach((t) => t.querySelectorAll<HTMLElement>(".sc").forEach(scramble));
         },
       });
@@ -170,6 +173,9 @@ export function Effects() {
     });
     cleanups.push(() => ctx.revert());
     const refresh = () => ScrollTrigger.refresh();
+    if (document.readyState === "complete") requestAnimationFrame(refresh);
+    else { window.addEventListener("load", refresh, { once: true }); cleanups.push(() => window.removeEventListener("load", refresh)); }
+    document.fonts?.ready.then(refresh);
     window.addEventListener("infra:refresh", refresh);
     cleanups.push(() => window.removeEventListener("infra:refresh", refresh));
     if (RM) $$(".pk").forEach((e) => e.remove());
@@ -232,9 +238,9 @@ export function Effects() {
 
     /* ---- canvases ---- */
     const terrain = $<HTMLCanvasElement>("#terrain");
-    if (terrain) cleanups.push(dotField(terrain, { cols: 84, rows: 24, packets: 12, horizon: 0.5, cx: 0.5, width: 1.35, dark: false }, RM));
+    if (terrain) cleanups.push(dotField(terrain, { cols: MOBILE ? 44 : 84, rows: MOBILE ? 16 : 24, packets: MOBILE ? 6 : 12, horizon: 0.5, cx: 0.5, width: 1.35, dark: false }, RM));
     const cgrid = $<HTMLCanvasElement>("#cgrid");
-    if (cgrid) cleanups.push(dotField(cgrid, { cols: 56, rows: 22, packets: 8, horizon: 0.35, cx: 0.7, width: 1.1, dark: true }, RM));
+    if (cgrid) cleanups.push(dotField(cgrid, { cols: MOBILE ? 32 : 56, rows: MOBILE ? 14 : 22, packets: MOBILE ? 4 : 8, horizon: 0.35, cx: 0.7, width: 1.1, dark: true }, RM));
     const chain = $<HTMLCanvasElement>("#chain");
     if (chain) {
       const blk = $("#fcBlk"), txc = $("#fcTx");
