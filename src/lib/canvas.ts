@@ -22,8 +22,10 @@ export function dotField(cv: HTMLCanvasElement, opt: FieldOpts, reduced: boolean
   const onLeave = () => { tmx = tmy = -9; };
   host.addEventListener("pointermove", onMove);
   host.addEventListener("pointerleave", onLeave);
-  window.addEventListener("resize", size);
-  const io = new IntersectionObserver(([e]) => { run = e.isIntersecting; });
+  // ResizeObserver catches layout changes (fonts/images loading) that never fire window "resize" — esp. iOS Safari.
+  const ro = new ResizeObserver(() => { size(); if (reduced) draw(); });
+  ro.observe(cv);
+  const io = new IntersectionObserver(([e]) => { run = e.isIntersecting; if (run && reduced) draw(); });
   io.observe(cv);
   const { cols: COLS, rows: ROWS } = opt;
   const pk = Array.from({ length: opt.packets }, () => ({ r: (Math.random() * ROWS) | 0, c: Math.random() * COLS, s: 0.08 + Math.random() * 0.18 }));
@@ -68,8 +70,7 @@ export function dotField(cv: HTMLCanvasElement, opt: FieldOpts, reduced: boolean
   };
   draw();
   return () => {
-    alive = false; cancelAnimationFrame(raf); io.disconnect();
-    window.removeEventListener("resize", size);
+    alive = false; cancelAnimationFrame(raf); io.disconnect(); ro.disconnect();
     host.removeEventListener("pointermove", onMove); host.removeEventListener("pointerleave", onLeave);
   };
 }
@@ -84,8 +85,10 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
   let lastW = -1, lastH = -1;
   const size = () => { const b = cv.getBoundingClientRect(); if (b.width === lastW && b.height === lastH) return; lastW = b.width; lastH = b.height; W = b.width; H = b.height; cv.width = W * D; cv.height = H * D; s = Math.min(W * 0.115, H * 0.17); };
   size();
-  window.addEventListener("resize", size);
-  const io = new IntersectionObserver(([e]) => { run = e.isIntersecting; });
+  const ro = new ResizeObserver(() => { size(); if (reduced && started) frame(performance.now()); });
+  ro.observe(cv);
+  let started = false;
+  const io = new IntersectionObserver(([e]) => { run = e.isIntersecting; if (run && reduced && started) frame(performance.now()); });
   io.observe(cv);
   const host = cv.parentElement!;
   const onMove = (e: PointerEvent) => { const b = cv.getBoundingClientRect(); tmx = (e.clientX - b.left) / W - 0.5; tmy = (e.clientY - b.top) / H - 0.5; };
@@ -214,11 +217,12 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     }
     if (!reduced) raf = requestAnimationFrame(frame);
   };
-  const start = () => { if (alive) raf = requestAnimationFrame(frame); };
-  if (document.fonts?.ready) document.fonts.ready.then(start); else start();
+  const start = () => { if (started || !alive) return; started = true; raf = requestAnimationFrame(frame); };
+  // iOS Safari's document.fonts.ready can stay pending — never block the animation on it.
+  document.fonts?.ready.then(start);
+  window.setTimeout(start, 400);
   return () => {
-    alive = false; cancelAnimationFrame(raf); io.disconnect();
-    window.removeEventListener("resize", size);
+    alive = false; cancelAnimationFrame(raf); io.disconnect(); ro.disconnect();
     host.removeEventListener("pointermove", onMove); host.removeEventListener("pointerleave", onLeave);
   };
 }
