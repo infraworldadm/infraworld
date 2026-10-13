@@ -3,8 +3,7 @@ import { FEE_MANAGER, POOLS } from "@/lib/pools";
 
 export const dynamic = "force-dynamic";
 
-const TARGET_RPC =
-  process.env.RPC_INTERNAL_URL || process.env.NEXT_PUBLIC_RPC_URL || "https://uat.infraworld.org";
+const TARGET_RPC = "https://uat.infraworld.org/";
 
 export async function GET() {
   try {
