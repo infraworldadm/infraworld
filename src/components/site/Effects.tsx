@@ -36,9 +36,9 @@ export function Effects() {
       cleanups.push(() => { gsap.ticker.remove(tick); lenis!.destroy(); });
     }
     const onAnchor = (e: MouseEvent) => {
-      const a = (e.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
+      const a = (e.target as Element).closest<HTMLAnchorElement>('a[href^="#"], a[href^="/#"]');
       if (!a) return;
-      const id = a.getAttribute("href")!;
+      const id = a.getAttribute("href")!.replace(/^\//, "");
       const target = id === "#top" ? 0 : document.querySelector<HTMLElement>(id);
       if (target === null) return;
       e.preventDefault();

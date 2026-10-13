@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const fmt = (n: number) => Math.round(n).toLocaleString("en-US");
 
-/** Illustrative revenue: fixed 10 AED fee × daily volume (log-scaled slider). */
+/** Revenue estimate: fixed 10 AED fee × daily volume (log-scaled slider). */
 export function Calculator() {
   const [v, setV] = useState(56);
   const tx = Math.max(100, Math.round(Math.pow(10, 2 + (v / 100) * 5) / 100) * 100);
@@ -31,7 +31,7 @@ export function Calculator() {
         <div><small>Yearly</small><b className="tn">{fmt(day * 365)} AED</b></div>
       </div>
       <p className="note" id="calcNote">
-        Illustrative: fixed 10 AED fee × transaction volume. Monthly uses 30 days.
+        Fixed 10 AED fee × transaction volume. Monthly uses 30 days.
       </p>
     </div>
   );

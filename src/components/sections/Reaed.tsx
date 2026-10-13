@@ -38,7 +38,6 @@ export function Reaed() {
           <div className="tile c5 dark rv">
             <div className="row">
               <Lbl>Peg monitor</Lbl>
-              <span className="live"><i />Illustrative</span>
             </div>
             <div className="peg">
               <div><small>AED</small><b className="tn">1.0000</b></div>

@@ -51,7 +51,7 @@ export function Hero() {
                 <canvas
                   id="chain"
                   role="img"
-                  aria-label="Illustration: transactions settle into blocks on an INFRA network, each at a fixed fee"
+                  aria-label="Transactions settle into blocks on an INFRA network, each at a fixed fee"
                 />
                 <div className="fc fc1">
                   <span className="lbl">Block sealed</span>
@@ -70,7 +70,6 @@ export function Hero() {
                     <small>fee 10.00 reAED</small>
                   </div>
                 </div>
-                <span className="stage-note">Illustrative</span>
               </div>
             </div>
             <div className="hstats">
@@ -100,7 +99,6 @@ export function Hero() {
           <div className="tile c8 dark rv">
             <div className="row">
               <Lbl>Settlement stream · reAED network</Lbl>
-              <span className="live"><i />Illustrative</span>
             </div>
             <div className="ledger" aria-hidden="true">
               <div className="lrow lhead">

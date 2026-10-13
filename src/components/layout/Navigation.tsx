@@ -1,17 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Btn, Ic } from "@/components/site/ui";
 
 const navigation = [
-  { name: "Overview", href: "#overview" },
-  { name: "INFRA", href: "#infra" },
-  { name: "Networks", href: "#networks" },
-  { name: "reAED", href: "#reaed" },
-  { name: "Challenges", href: "#challenges" },
-  { name: "Technology", href: "#technology" },
-  { name: "FAQ", href: "#faq" },
-  { name: "Contact", href: "#contact" },
+  { name: "Overview", href: "/#overview" },
+  { name: "INFRA", href: "/#infra" },
+  { name: "Networks", href: "/#networks" },
+  { name: "reAED", href: "/#reaed" },
+  { name: "Challenges", href: "/#challenges" },
+  { name: "Technology", href: "/#technology" },
+  { name: "FAQ", href: "/#faq" },
+  { name: "Pool Balances", href: "/balances" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 type LenisLike = { stop: () => void; start: () => void } | undefined;
@@ -20,7 +22,9 @@ export function Navigation() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [active, setActive] = useState("overview");
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const [active, setActive] = useState(isHome ? "overview" : pathname);
 
   useEffect(() => {
     let last = window.scrollY;
@@ -32,10 +36,12 @@ export function Navigation() {
       setScrolled(y > 10);
       setHidden(y > last && y > 400);
       last = y;
+      if (window.location.pathname !== "/") return;
       let current = "overview";
       for (const item of navigation) {
-        const el = document.getElementById(item.href.slice(1));
-        if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) current = item.href.slice(1);
+        if (!item.href.startsWith("/#")) continue;
+        const el = document.getElementById(item.href.slice(2));
+        if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) current = item.href.slice(2);
       }
       setActive(current);
     };
@@ -55,18 +61,18 @@ export function Navigation() {
       <div className="prog" id="prog" />
       <header className={`nav${scrolled ? " s" : ""}${hidden && !open ? " hide" : ""}`}>
         <div className="wrap">
-          <a href="#top" className="brand" aria-label="INFRA home">
+          <a href={isHome ? "#top" : "/"} className="brand" aria-label="INFRA home">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/Logo/infra-logo-light.svg" alt="INFRA" width={86} height={26} />
           </a>
           <nav className="links" aria-label="Primary">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className={active === item.href.slice(1) ? "on" : ""}>
+              <a key={item.name} href={item.href} className={active === item.href.slice(2) || active === item.href ? "on" : ""}>
                 {item.name}
               </a>
             ))}
           </nav>
-          <Btn href="#contact" label="Request a pilot" mag={false} />
+          <Btn href="/#contact" label="Request a pilot" mag={false} />
           <button
             className="menu-btn"
             onClick={() => setOpen(!open)}
