@@ -15,6 +15,7 @@ export function Footer() {
           <a href="/#technology">Technology</a>
           <a href="/#faq">FAQ</a>
           <a href="/balances">Pool Balances</a>
+          <a href="/wallet">Wallet</a>
           <a href="/#contact">Contact</a>
         </nav>
         <nav aria-label="Legal">

@@ -4,18 +4,19 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Btn, Ic } from "@/components/site/ui";
 
-// "local" sections exist on both the home and reAED pages, so they anchor in-page there.
+// "local": pages that contain that section, so the link anchors in-page there.
 const navigation = [
   { name: "Overview", href: "/#overview" },
   { name: "Networks", href: "/#networks" },
   { name: "reAED", href: "/reaed" },
   { name: "Challenges", href: "/#challenges" },
   { name: "Technology", href: "/#technology" },
-  { name: "FAQ", href: "/#faq", local: true },
-  { name: "Pool Balances", href: "/balances" },
-  { name: "Contact", href: "/#contact", local: true },
+  { name: "FAQ", href: "/#faq", local: ["/", "/reaed"] },
+  { name: "Pools", href: "/balances" },
+  { name: "Wallet", href: "/wallet" },
+  { name: "Contact", href: "/#contact", local: ["/", "/reaed", "/wallet"] },
 ];
-const SECTION_PAGES = ["/", "/reaed"];
+const SECTION_PAGES = ["/", "/reaed", "/wallet"];
 
 type LenisLike = { stop: () => void; start: () => void } | undefined;
 
@@ -26,7 +27,7 @@ export function Navigation() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const hrefFor = (item: (typeof navigation)[number]) =>
-    item.local && SECTION_PAGES.includes(pathname) ? item.href.slice(1) : item.href;
+    "local" in item && item.local?.includes(pathname) ? item.href.slice(1) : item.href;
   const [active, setActive] = useState(isHome ? "overview" : pathname);
 
   useEffect(() => {
@@ -40,10 +41,10 @@ export function Navigation() {
       setHidden(y > last && y > 400);
       last = y;
       if (!SECTION_PAGES.includes(window.location.pathname)) return;
-      let current = window.location.pathname === "/" ? "overview" : "/reaed";
+      let current = window.location.pathname === "/" ? "overview" : window.location.pathname;
       for (const item of navigation) {
         if (!item.href.startsWith("/#")) continue;
-        if (window.location.pathname !== "/" && !item.local) continue;
+        if (window.location.pathname !== "/" && !("local" in item && item.local?.includes(window.location.pathname))) continue;
         const el = document.getElementById(item.href.slice(2));
         if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) current = item.href.slice(2);
       }
