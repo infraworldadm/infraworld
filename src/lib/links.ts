@@ -1,2 +1,4 @@
-// Typeform intake for teams that want to build / white-label on INFRA.
-export const BUILD_FORM_URL = "https://form.typeform.com/to/g5E1MOZs";
+// "Build with INFRA" intake (native multi-step form at /build).
+export const BUILD_FORM_URL = "/build";
+// Where /build submissions are emailed (via FormSubmit; first submission sends a one-time activation email).
+export const BUILD_FORM_EMAIL = "infraworld.adm@gmail.com";

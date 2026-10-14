@@ -27,7 +27,7 @@ export function GlobalHero() {
                 an EVM-compatible chain. reAED is live; reUSD, reEUR, reGBP, reINR, reSAR and your own currency follow on the same stack.
               </p>
               <div className="ctas hi">
-                <Btn href={BUILD_FORM_URL} external label="Launch a currency network" variant="b" />
+                <Btn href={BUILD_FORM_URL} label="Launch a currency network" variant="b" />
                 <Btn href="/reaed" label="Explore reAED" variant="o" />
               </div>
             </div>

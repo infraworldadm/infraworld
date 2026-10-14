@@ -18,7 +18,7 @@ export function BuildCta() {
             <h2>Launch your own stablecoin network, wallet or chain.</h2>
             <p>Pick what you need — currency peg, fee logic, pool distribution, Android / iOS / extension wallets, bridge and more. Takes about 4 minutes.</p>
           </div>
-          <a className="bc-btn" href={BUILD_FORM_URL} target="_blank" rel="noopener noreferrer">
+          <a className="bc-btn" href={BUILD_FORM_URL}>
             <span className="bc-ring" aria-hidden="true" />
             <span>Start building</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>

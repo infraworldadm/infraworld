@@ -16,7 +16,7 @@ export function FloatingBuild() {
     return () => window.removeEventListener("scroll", on);
   }, []);
   return (
-    <a className={`fab-build${show ? " on" : ""}`} href={BUILD_FORM_URL} target="_blank" rel="noopener noreferrer" aria-hidden={!show} tabIndex={show ? 0 : -1}>
+    <a className={`fab-build${show ? " on" : ""}`} href={BUILD_FORM_URL} aria-hidden={!show} tabIndex={show ? 0 : -1}>
       <span className="fb-dot" />
       Build with INFRA
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>

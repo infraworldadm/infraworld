@@ -58,7 +58,7 @@ export function Infra() {
               <Lbl blue>Stablecoin networks</Lbl>
               <h2 className="st2">One infrastructure. A pegged stablecoin for each currency.</h2>
             </div>
-            <Btn href={BUILD_FORM_URL} external label="Launch a currency network" variant="k" />
+            <Btn href={BUILD_FORM_URL} label="Launch a currency network" variant="k" />
           </div>
           <p style={{ maxWidth: "70ch" }}>
             INFRA is not limited to one currency. It provides pegged stablecoin network infrastructure: each network uses a stablecoin

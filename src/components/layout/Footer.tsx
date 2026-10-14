@@ -3,11 +3,11 @@ import { BuildCta } from "@/components/site/BuildCta";
 import { FloatingBuild } from "@/components/site/FloatingBuild";
 import { BUILD_FORM_URL } from "@/lib/links";
 
-export function Footer() {
+export function Footer({ cta = true }: { cta?: boolean }) {
   return (
     <>
-    <BuildCta />
-    <FloatingBuild />
+    {cta && <BuildCta />}
+    {cta && <FloatingBuild />}
     <footer className="site wrap">
       <div className="foot">
         <a href="/" className="brand" aria-label="INFRA home">
@@ -28,7 +28,7 @@ export function Footer() {
         <nav aria-label="Legal">
           <a href="/privacy-policy">Privacy Policy</a>
           <a href="/terms">Terms &amp; Conditions</a>
-          <a href={BUILD_FORM_URL} target="_blank" rel="noopener noreferrer">Build / White label</a>
+          <a href={BUILD_FORM_URL}>Build / White label</a>
         </nav>
         <span>© {new Date().getFullYear()} INFRA. All rights reserved.</span>
       </div>
