@@ -1,5 +1,7 @@
 /* Canvas renderers for the INFRA site. Each returns a cleanup function. */
 
+const isDark = () => document.documentElement.dataset.theme === "dark";
+
 type FieldOpts = { cols: number; rows: number; packets: number; horizon: number; cx: number; width: number; dark: boolean };
 
 /** Perspective dot terrain with blue transaction streaks; ripples toward the pointer. */
@@ -48,7 +50,7 @@ export function dotField(cv: HTMLCanvasElement, opt: FieldOpts, reduced: boolean
           const u = c / (COLS - 1), px = W * opt.cx + (u - 0.5) * W * spread * opt.width;
           if (px < 0 || px > W) continue;
           const py = py0 - height(u, z, px, py0) * (6 + zz * 22), a = 0.12 + zz * 0.55, s = 0.6 + zz * 1.6;
-          x.fillStyle = opt.dark ? `rgba(255,255,255,${a * 0.6})` : `rgba(10,11,14,${a})`;
+          x.fillStyle = opt.dark || isDark() ? `rgba(255,255,255,${a * 0.6})` : `rgba(10,11,14,${a})`;
           x.fillRect(px - s / 2, py - s / 2, s, s);
         }
       }
@@ -116,11 +118,12 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
   };
   const cube = (X: number, z: number, blue: boolean, a: number, label: number) => {
     x.globalAlpha = a;
-    const st = blue ? "rgba(255,255,255,.28)" : "rgba(10,11,14,.16)";
-    poly([P(X, 1, z), P(X + 1, 1, z), P(X + 1, 1, z + 1), P(X, 1, z + 1)], blue ? "#1546D6" : "#E8EDF7", st);
-    poly([P(X + 1, 0, z), P(X + 1, 1, z), P(X + 1, 1, z + 1), P(X + 1, 0, z + 1)], blue ? "#0E36AE" : "#D3DCEF", st);
-    poly([P(X, 0, z + 1), P(X + 1, 0, z + 1), P(X + 1, 1, z + 1), P(X, 1, z + 1)], blue ? "#2F68FF" : "#FFFFFF", st);
-    x.strokeStyle = blue ? "rgba(255,255,255,.14)" : "rgba(10,11,14,.07)";
+    const dk = isDark();
+    const st = blue ? "rgba(255,255,255,.28)" : dk ? "rgba(255,255,255,.14)" : "rgba(10,11,14,.16)";
+    poly([P(X, 1, z), P(X + 1, 1, z), P(X + 1, 1, z + 1), P(X, 1, z + 1)], blue ? "#1546D6" : dk ? "#1C212C" : "#E8EDF7", st);
+    poly([P(X + 1, 0, z), P(X + 1, 1, z), P(X + 1, 1, z + 1), P(X + 1, 0, z + 1)], blue ? "#0E36AE" : dk ? "#151922" : "#D3DCEF", st);
+    poly([P(X, 0, z + 1), P(X + 1, 0, z + 1), P(X + 1, 1, z + 1), P(X, 1, z + 1)], blue ? "#2F68FF" : dk ? "#262C39" : "#FFFFFF", st);
+    x.strokeStyle = blue ? "rgba(255,255,255,.14)" : dk ? "rgba(255,255,255,.06)" : "rgba(10,11,14,.07)";
     for (let k = 1; k < 4; k++) {
       const zz = z + k / 4, a1 = P(X, 1, zz), b1 = P(X + 1, 1, zz), a2 = P(X + 1, 0, zz);
       x.beginPath(); x.moveTo(a1[0], a1[1]); x.lineTo(b1[0], b1[1]); x.moveTo(a2[0], a2[1]); x.lineTo(b1[0], b1[1]); x.stroke();
@@ -129,7 +132,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     x.save();
     x.setTransform((D * C * s) / 100, (D * S * s) / 100, (-D * C * s) / 100, (D * S * s) / 100, o[0] * D, o[1] * D);
     x.textAlign = "center";
-    x.fillStyle = blue ? "#fff" : "rgba(10,11,14,.78)";
+    x.fillStyle = blue ? "#fff" : dk ? "rgba(242,244,248,.82)" : "rgba(10,11,14,.78)";
     x.font = `500 15px ${FM}`;
     x.fillText("#" + String(label).slice(-4), 50, 46);
     x.fillStyle = blue ? "#fff" : "#1F5BFF";
@@ -142,7 +145,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
   const link = (X1: number, a: number) => {
     x.globalAlpha = a;
     const p1 = P(X1 + 1, 0.5, 0.5), p2 = P(X1 + G, 0.5, 0.5);
-    x.strokeStyle = "rgba(10,11,14,.35)"; x.lineWidth = 1.4; x.setLineDash([3, 3]);
+    x.strokeStyle = isDark() ? "rgba(255,255,255,.35)" : "rgba(10,11,14,.35)"; x.lineWidth = 1.4; x.setLineDash([3, 3]);
     x.beginPath(); x.moveTo(p1[0], p1[1]); x.lineTo(p2[0], p2[1]); x.stroke(); x.setLineDash([]);
     x.globalAlpha = 1;
   };
@@ -158,7 +161,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     x.stroke(); x.setLineDash([]);
   };
   const floor = () => {
-    x.strokeStyle = "rgba(10,11,14,.06)"; x.lineWidth = 1;
+    x.strokeStyle = isDark() ? "rgba(255,255,255,.06)" : "rgba(10,11,14,.06)"; x.lineWidth = 1;
     for (let i = -9; i <= 4; i++) { const a = P(i * G * 0.5, -1.5, 0), b = P(i * G * 0.5, 2.5, 0); x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.stroke(); }
     for (let j = -1; j <= 2; j++) { const a = P(-8.5, j, 0), b = P(3.5, j, 0); x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.stroke(); }
   };
@@ -324,7 +327,8 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
       g.addColorStop(0, "rgba(31,91,255,.10)"); g.addColorStop(0.75, "rgba(31,91,255,.06)"); g.addColorStop(1, "rgba(31,91,255,0)");
       x.fillStyle = g; x.beginPath(); x.arc(cx, cy, R * 1.35, 0, 7); x.fill();
       const body = x.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.1, cx, cy, R);
-      body.addColorStop(0, "#ffffff"); body.addColorStop(1, "#E9EEF9");
+      const dk = isDark();
+      body.addColorStop(0, dk ? "#1A1F2B" : "#ffffff"); body.addColorStop(1, dk ? "#0C0F15" : "#E9EEF9");
       x.fillStyle = body; x.beginPath(); x.arc(cx, cy, R, 0, 7); x.fill();
       x.strokeStyle = "rgba(31,91,255,.22)"; x.lineWidth = 1; x.stroke();
       // dots
@@ -332,7 +336,7 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
         const p = P(d.v);
         if (p[2] <= 0) continue;
         if (d.land) {
-          x.fillStyle = `rgba(10,11,14,${0.18 + p[2] * 0.6})`;
+          x.fillStyle = dk ? `rgba(242,244,248,${0.15 + p[2] * 0.55})` : `rgba(10,11,14,${0.18 + p[2] * 0.6})`;
           const s = 1 + p[2] * 1.4;
           x.fillRect(p[0] - s / 2, p[1] - s / 2, s, s);
         } else {
@@ -351,7 +355,7 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
         const qx = mx - (dy / L) * L * 0.18, qy = my + (dx / L) * L * 0.18 - L * 0.12;
         x.globalAlpha = a;
         x.beginPath(); x.moveTo(hx, hy); x.quadraticCurveTo(qx, qy, p[0], p[1]);
-        x.strokeStyle = n.live ? "rgba(31,91,255,.85)" : n.you ? "rgba(10,11,14,.25)" : "rgba(31,91,255,.4)";
+        x.strokeStyle = n.live ? "rgba(31,91,255,.85)" : n.you ? (dk ? "rgba(255,255,255,.3)" : "rgba(10,11,14,.25)") : "rgba(31,91,255,.55)";
         x.lineWidth = n.live ? 2 : 1.2;
         x.setLineDash(n.live ? [] : [4, 4]); x.stroke(); x.setLineDash([]);
         if (!n.you) {
@@ -370,22 +374,22 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
         if (p[2] < 0.12) return;
         x.globalAlpha = Math.min(1, (p[2] - 0.12) * 3);
         if (n.live) { x.strokeStyle = `rgba(31,91,255,${0.6 * (1 - pulse)})`; x.lineWidth = 1.5; x.beginPath(); x.arc(p[0], p[1], 5 + pulse * 18, 0, 7); x.stroke(); }
-        x.fillStyle = n.live ? "#1F5BFF" : n.you ? "#9AA3B2" : "#0A0B0E"; x.beginPath(); x.arc(p[0], p[1], n.live ? 5 : 3.5, 0, 7); x.fill();
+        x.fillStyle = n.live ? "#1F5BFF" : n.you ? "#9AA3B2" : dk ? "#F2F4F8" : "#0A0B0E"; x.beginPath(); x.arc(p[0], p[1], n.live ? 5 : 3.5, 0, 7); x.fill();
         x.fillStyle = "#fff"; x.beginPath(); x.arc(p[0], p[1], n.live ? 2 : 1.3, 0, 7); x.fill();
         const top = n.you ? "+ " + n.sym : n.sym;
         x.font = `600 12px ${FS}`; const w1 = x.measureText(top).width;
         x.font = `500 9px ${FM}`; const w2 = x.measureText(n.city.toUpperCase()).width;
         const bw = Math.max(w1, w2) + 18, bh = 34;
         const bx = Math.max(4, Math.min(W - bw - 4, n.side < 0 ? p[0] - bw - 9 : p[0] + 9)), by = Math.max(4, Math.min(H - bh - 4, p[1] - bh / 2));
-        x.fillStyle = n.live ? "#1F5BFF" : "rgba(255,255,255,.96)";
-        x.strokeStyle = n.live ? "#1F5BFF" : n.you ? "rgba(10,11,14,.25)" : "rgba(10,11,14,.1)";
+        x.fillStyle = n.live ? "#1F5BFF" : dk ? "rgba(26,30,39,.96)" : "rgba(255,255,255,.96)";
+        x.strokeStyle = n.live ? "#1F5BFF" : n.you ? (dk ? "rgba(255,255,255,.3)" : "rgba(10,11,14,.25)") : dk ? "rgba(255,255,255,.14)" : "rgba(10,11,14,.1)";
         x.setLineDash(n.you ? [3, 3] : []);
         x.beginPath();
         const r = 8;
         x.moveTo(bx + r, by); x.arcTo(bx + bw, by, bx + bw, by + bh, r); x.arcTo(bx + bw, by + bh, bx, by + bh, r); x.arcTo(bx, by + bh, bx, by, r); x.arcTo(bx, by, bx + bw, by, r);
         x.closePath(); x.fill(); x.stroke(); x.setLineDash([]);
-        x.fillStyle = n.live ? "#fff" : n.you ? "#1F5BFF" : "#0A0B0E"; x.font = `600 12px ${FS}`; x.fillText(top, bx + 9, by + 15);
-        x.fillStyle = n.live ? "rgba(255,255,255,.78)" : "rgba(10,11,14,.5)"; x.font = `500 9px ${FM}`; x.fillText(n.city.toUpperCase(), bx + 9, by + 27);
+        x.fillStyle = n.live ? "#fff" : n.you ? "#7EA0FF" : dk ? "#F2F4F8" : "#0A0B0E"; x.font = `600 12px ${FS}`; x.fillText(top, bx + 9, by + 15);
+        x.fillStyle = n.live ? "rgba(255,255,255,.78)" : dk ? "rgba(242,244,248,.55)" : "rgba(10,11,14,.5)"; x.font = `500 9px ${FM}`; x.fillText(n.city.toUpperCase(), bx + 9, by + 27);
         x.globalAlpha = 1;
       };
       [...pts].sort((a, b) => a.p[2] - b.p[2]).forEach(({ n, p }) => label(p, n));

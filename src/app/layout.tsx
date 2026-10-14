@@ -44,7 +44,10 @@ export const viewport: Viewport = { themeColor: "#1F5BFF", width: "device-width"
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem("infra-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}` }} />
+      </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
         <JsonLd data={[orgJsonLd, siteJsonLd]} />
         {children}
