@@ -11,7 +11,7 @@ export function Footer() {
         <nav aria-label="Footer">
           <a href="/#infra">INFRA</a>
           <a href="/#networks">Networks</a>
-          <a href="/#reaed">reAED</a>
+          <a href="/reaed">reAED</a>
           <a href="/#technology">Technology</a>
           <a href="/#faq">FAQ</a>
           <a href="/balances">Pool Balances</a>

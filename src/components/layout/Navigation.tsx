@@ -4,17 +4,18 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Btn, Ic } from "@/components/site/ui";
 
+// "local" sections exist on both the home and reAED pages, so they anchor in-page there.
 const navigation = [
   { name: "Overview", href: "/#overview" },
-  { name: "INFRA", href: "/#infra" },
   { name: "Networks", href: "/#networks" },
-  { name: "reAED", href: "/#reaed" },
+  { name: "reAED", href: "/reaed" },
   { name: "Challenges", href: "/#challenges" },
   { name: "Technology", href: "/#technology" },
-  { name: "FAQ", href: "/#faq" },
+  { name: "FAQ", href: "/#faq", local: true },
   { name: "Pool Balances", href: "/balances" },
-  { name: "Contact", href: "/#contact" },
+  { name: "Contact", href: "/#contact", local: true },
 ];
+const SECTION_PAGES = ["/", "/reaed"];
 
 type LenisLike = { stop: () => void; start: () => void } | undefined;
 
@@ -24,6 +25,8 @@ export function Navigation() {
   const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const hrefFor = (item: (typeof navigation)[number]) =>
+    item.local && SECTION_PAGES.includes(pathname) ? item.href.slice(1) : item.href;
   const [active, setActive] = useState(isHome ? "overview" : pathname);
 
   useEffect(() => {
@@ -36,10 +39,11 @@ export function Navigation() {
       setScrolled(y > 10);
       setHidden(y > last && y > 400);
       last = y;
-      if (window.location.pathname !== "/") return;
-      let current = "overview";
+      if (!SECTION_PAGES.includes(window.location.pathname)) return;
+      let current = window.location.pathname === "/" ? "overview" : "/reaed";
       for (const item of navigation) {
         if (!item.href.startsWith("/#")) continue;
+        if (window.location.pathname !== "/" && !item.local) continue;
         const el = document.getElementById(item.href.slice(2));
         if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) current = item.href.slice(2);
       }
@@ -67,12 +71,12 @@ export function Navigation() {
           </a>
           <nav className="links" aria-label="Primary">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className={active === item.href.slice(2) || active === item.href ? "on" : ""}>
+              <a key={item.name} href={hrefFor(item)} className={active === item.href.slice(2) || active === item.href ? "on" : ""}>
                 {item.name}
               </a>
             ))}
           </nav>
-          <Btn href="/#contact" label="Request a pilot" mag={false} />
+          <Btn href={SECTION_PAGES.includes(pathname) ? "#contact" : "/#contact"} label="Request a pilot" mag={false} />
           <button
             className="menu-btn"
             onClick={() => setOpen(!open)}
@@ -86,7 +90,7 @@ export function Navigation() {
       </header>
       <div className={`drawer${open ? " open" : ""}`} id="drawer" aria-hidden={!open}>
         {navigation.map((item, i) => (
-          <a key={item.name} href={item.href} onClick={() => setOpen(false)}>
+          <a key={item.name} href={hrefFor(item)} onClick={() => setOpen(false)}>
             {item.name}
             <small>{String(i + 1).padStart(2, "0")}</small>
           </a>

@@ -145,7 +145,7 @@ export function Effects() {
         },
       });
       $$(".st2").forEach((h) => gsap.from(h, { y: 24, opacity: 0.2, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: h, start: "top 90%" } }));
-      gsap.to("#scrub .wd", { opacity: 1, stagger: 0.1, ease: "none", scrollTrigger: { trigger: "#scrub", start: "top 80%", end: "bottom 40%", scrub: true } });
+      if ($("#scrub")) gsap.to("#scrub .wd", { opacity: 1, stagger: 0.1, ease: "none", scrollTrigger: { trigger: "#scrub", start: "top 80%", end: "bottom 40%", scrub: true } });
       gsap.to(".hero-in", { yPercent: -12, ease: "none", scrollTrigger: { trigger: ".t-hero", start: "top top", end: "bottom top", scrub: true } });
 
       /* pinned reAED steps */
@@ -157,10 +157,12 @@ export function Effects() {
         steps.forEach((s, i) => s.classList.toggle("on", i <= n));
         pb.forEach((b) => b.classList.toggle("on", +b.dataset.k! === n || (n === 2 && b.dataset.k === "1")));
       };
-      upd(0);
+      if (steps.length) upd(0);
       const mm = gsap.matchMedia();
+      if ($("#howTile")) {
       mm.add("(min-width:1081px)", () => { ScrollTrigger.create({ trigger: "#howTile", start: "top 96px", end: "+=1400", pin: "#howWrap", scrub: true, onUpdate: (s) => upd(s.progress) }); });
       mm.add("(max-width:1080px)", () => { ScrollTrigger.create({ trigger: "#howTile", start: "top 70%", end: "bottom 40%", scrub: true, onUpdate: (s) => upd(s.progress) }); });
+      }
 
       /* chart draw */
       ([["#volPath", 2.2, 0], ["#flatPath", 1.4, 1.4]] as const).forEach(([sel, d, dl]) => {

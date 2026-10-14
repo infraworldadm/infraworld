@@ -2,7 +2,7 @@ import { Btn, Ic, Lbl } from "@/components/site/ui";
 import { Calculator } from "@/components/site/Calculator";
 
 const networks = [
-  { sym: "reAED", cur: "AED", name: "UAE Dirham", status: "First network · INFRA project", main: true, href: "#reaed" },
+  { sym: "reAED", cur: "AED", name: "UAE Dirham", status: "First network · INFRA project", main: true, href: "/reaed" },
   { sym: "reUSD", cur: "USD", name: "US Dollar", status: "On request", href: "#contact" },
   { sym: "reEUR", cur: "EUR", name: "Euro", status: "On request", href: "#contact" },
   { sym: "reGBP", cur: "GBP", name: "British Pound", status: "On request", href: "#contact" },

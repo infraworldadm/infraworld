@@ -27,13 +27,14 @@ export function Hero() {
             <div className="fade" aria-hidden="true" />
             <div className="hero-grid">
               <div className="hero-in">
-                <a href="#networks" className="pill hi">
+                {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+                <a href="/#networks" className="pill hi">
                   <span className="pd">Stablecoin networks</span>
                   <span className="pl-full">reAED for the UAE Dirham · reUSD · reEUR · reGBP</span>
                   <span className="pl-short">reAED · reUSD · reEUR · reGBP</span>
                   <Ic n="arrow" />
                 </a>
-                <Lbl blue>Pegged stablecoin network infrastructure</Lbl>
+                <Lbl blue>reAED · An INFRA network</Lbl>
                 <h1 id="h1">
                   <span className="ln"><span>Digital Infrastructure for</span></span>
                   <span className="ln"><span><span className="bl">Payments, Settlement,</span></span></span>
