@@ -873,3 +873,15 @@ html[data-theme="dark"] .theme-tg .moon { transform: none; opacity: 1 }
 /* first paint: hide hero intro targets until GSAP sets their start state (class added in <head>, removed by Effects) */
 html.intro .t-hero, html.intro .t-hero .hi, html.intro #h1 .ln > span, html.intro .hstats > div, html.intro .fc { opacity: 0 }
 @media (max-width: 1080px) { .nav .wrap > .theme-tg { margin-left: 8px } }
+
+/* ---- Footer ---- */
+.foot-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr)); gap: 32px; padding-top: 12px; padding-bottom: 28px; border-bottom: 1px solid var(--line) }
+.foot-brand { display: grid; gap: 14px; align-content: start; max-width: 320px }
+.foot-brand p { font-size: .88rem; color: var(--t2); line-height: 1.55 }
+.foot-col { display: grid; gap: 10px; align-content: start }
+.foot-col h4 { font-family: var(--m); font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); margin-bottom: 4px }
+.foot-col a { font-size: .9rem; color: var(--t2); transition: color .25s; width: fit-content }
+.foot-col a:hover { color: var(--blue) }
+.foot-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-top: 18px; font-size: .8rem; color: var(--t3) }
+@media (max-width: 1080px) { .foot-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) } .foot-brand { grid-column: 1 / -1; max-width: none } }
+@media (max-width: 640px) { .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px } }
