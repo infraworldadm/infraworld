@@ -106,28 +106,41 @@ export function BuildForm() {
 
   const submit = useCallback(async () => {
     setState("sending");
-    const data: Record<string, string> = {
-      _subject: `New INFRA build request — ${pkg[0]} — ${String(a.company || a.name || "")}`,
-      _template: "table",
-      _captcha: "false",
-      _replyto: String(a.email || ""),
-      Package: pkg[0],
-    };
+    const rows: [string, string][] = [["Package", pkg[0]]];
     for (const qq of QS) {
       if (qq.show && !qq.show(a)) continue;
       const v = a[qq.id];
       if (v === undefined || (Array.isArray(v) ? !v.length : !String(v).trim())) continue;
-      data[qq.title] = Array.isArray(v) ? v.join(", ") : String(v);
+      rows.push([qq.title, Array.isArray(v) ? v.join(", ") : String(v)]);
     }
-    data["Submitted from"] = window.location.href;
+    rows.push(["Submitted from", window.location.href]);
+    const email = String(a.email || "");
     try {
-      const res = await fetch(`https://formsubmit.co/ajax/${BUILD_FORM_EMAIL}`, {
+      // 1) Branded emails to INFRA + the customer (server, Gmail SMTP)
+      const res = await fetch("/api/build", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pkg: pkg[0], pkgMsg: pkg[1], name: a.name, company: a.company, email, rows }),
+      });
+      if (res.ok) { setState("done"); return; }
+      if (res.status !== 501) throw new Error("send failed");
+      // 2) Fallback when SMTP isn't configured: FormSubmit (plain auto-reply to the customer)
+      const data: Record<string, string> = {
+        _subject: `New INFRA build request — ${pkg[0]} — ${String(a.company || a.name || "")}`,
+        _template: "table",
+        _captcha: "false",
+        _replyto: email,
+        email,
+        _autoresponse: `Thanks ${String(a.name || "").split(" ")[0]} — we've received your INFRA ${pkg[0]} request. ${pkg[1]} — The INFRA team, infraworld.org`,
+        ...Object.fromEntries(rows),
+      };
+      const fs = await fetch(`https://formsubmit.co/ajax/${BUILD_FORM_EMAIL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(data),
       });
-      const j = await res.json().catch(() => ({}));
-      if (!res.ok || String(j.success) === "false") throw new Error(j.message || "Send failed");
+      const j = await fs.json().catch(() => ({}));
+      if (!fs.ok || String(j.success) === "false") throw new Error(j.message || "Send failed");
       setState("done");
     } catch {
       setState("fail");
@@ -257,7 +270,7 @@ export function BuildForm() {
                 <span className="bf-check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg></span>
                 <span className="bf-kicker">{pkg[0]} package</span>
                 <h2>Thank you, {String(a.name || "").split(" ")[0] || "there"}!</h2>
-                <p className="bf-help">{pkg[1]} Our team has your answers and will reply to {String(a.email || "your email")}.</p>
+                <p className="bf-help">{pkg[1]} A confirmation with your selections is on its way to {String(a.email || "your email")}.</p>
                 {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
                 <a className="bf-ok" href="/">Back to INFRA</a>
               </>
