@@ -13,7 +13,6 @@ const navigation = [
   { name: "Technology", href: "/#technology" },
   { name: "FAQ", href: "/#faq", local: ["/", "/reaed"] },
   { name: "Pools", href: "/balances" },
-  { name: "Wallet", href: "/wallet" },
   { name: "Contact", href: "/#contact", local: ["/", "/reaed", "/wallet"] },
 ];
 const SECTION_PAGES = ["/", "/reaed", "/wallet"];
@@ -77,6 +76,14 @@ export function Navigation() {
               </a>
             ))}
           </nav>
+          <a href="/wallet" className={`nav-wallet${pathname === "/wallet" ? " on" : ""}`} aria-label="Get INFRA Wallet">
+            <span className="nw-ic">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/wallet/infra-wallet-logo.png" alt="" width={22} height={22} />
+            </span>
+            <span className="nw-tx"><span className="nw-get">Get </span><b>Wallet</b></span>
+            <svg className="nw-dl" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14" /></svg>
+          </a>
           <Btn href={SECTION_PAGES.includes(pathname) ? "#contact" : "/#contact"} label="Request a pilot" mag={false} />
           <button
             className="menu-btn"
@@ -96,6 +103,12 @@ export function Navigation() {
             <small>{String(i + 1).padStart(2, "0")}</small>
           </a>
         ))}
+        <a href="/wallet" className="drawer-wallet" onClick={() => setOpen(false)}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/wallet/infra-wallet-logo.png" alt="" width={36} height={36} />
+          Get INFRA Wallet
+          <small>Extension · Android</small>
+        </a>
       </div>
     </>
   );
