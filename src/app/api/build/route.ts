@@ -5,6 +5,7 @@ import { BUILD_FORM_EMAIL } from "@/lib/links";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 10;
 
 // Configure in Vercel → Settings → Environment Variables:
 //   SMTP_USER = infraworld.adm@gmail.com   SMTP_PASS = <Gmail app password>

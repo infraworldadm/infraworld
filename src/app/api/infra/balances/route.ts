@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { FEE_MANAGER, POOLS } from "@/lib/pools";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 10;
 
 const TARGET_RPC = "https://uat.infraworld.org/";
 
