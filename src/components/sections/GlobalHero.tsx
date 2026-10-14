@@ -23,7 +23,7 @@ export function GlobalHero() {
               </h1>
               <p className="sub hi">
                 INFRA gives economies their own pegged stablecoin network — fixed fees, stable value and auditable flows on
-                an EVM-compatible chain. reAED is first; reUSD, reEUR and reGBP follow on the same stack.
+                an EVM-compatible chain. reAED is live; reUSD, reEUR, reGBP, reINR, reSAR and your own currency follow on the same stack.
               </p>
               <div className="ctas hi">
                 <Btn href="#contact" label="Launch a currency network" variant="b" />
@@ -31,11 +31,11 @@ export function GlobalHero() {
               </div>
             </div>
             <div className="stage" id="stage" data-cursor="Global">
-              <canvas id="globe" role="img" aria-label="Globe showing settlement arcs from the INFRA hub in Dubai (reAED, live) to reUSD, reEUR and reGBP networks" />
+              <canvas id="globe" role="img" aria-label="The INFRA core connecting to pegged stablecoin networks around the world: reAED (live), reUSD, reEUR, reGBP, reINR, reSAR, reSGD, reJPY and your currency" />
               <div className="fc fc1">
                 <span className="lbl">Networks</span>
-                <b className="tn">1 live · 3 ready</b>
-                <small>reAED · reUSD · reEUR · reGBP</small>
+                <b className="tn">1 live · any fiat ready</b>
+                <small>reAED · reUSD · reEUR · reGBP · reINR · reSAR …</small>
               </div>
               <div className="fc fc2">
                 <span className="okb"><Ic n="check" /></span>

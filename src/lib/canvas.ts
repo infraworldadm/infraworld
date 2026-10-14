@@ -227,7 +227,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
   };
 }
 
-/** INFRA Global: dotted globe with settlement arcs from the Dubai hub to each currency network. */
+/** INFRA Global: dotted globe; the INFRA core fans out to a pegged stablecoin network per currency. */
 export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
   const x = cv.getContext("2d");
   if (!x) return () => {};
@@ -288,17 +288,20 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
     if (land || i % 4 === 0) dots.push({ v, land });
   }
   const v3 = (lat: number, lon: number) => [Math.cos(lat * RAD) * Math.sin(lon * RAD), Math.sin(lat * RAD), Math.cos(lat * RAD) * Math.cos(lon * RAD)] as const;
-  const hub = { v: v3(25.2, 55.3) };
+  // Currency networks INFRA can launch. side: label placement (-1 left, 1 right).
   const nodes = [
-    { sym: "reUSD", city: "New York", v: v3(40.7, -74), live: false, left: true },
-    { sym: "reEUR", city: "Frankfurt", v: v3(50.1, 8.7), live: false, left: false },
-    { sym: "reGBP", city: "London", v: v3(51.5, -0.1), live: false, left: true },
-  ];
-  const slerp = (a: readonly number[], b: readonly number[], t: number) => {
-    const d = Math.acos(Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]));
-    const s = Math.sin(d) || 1, k1 = Math.sin((1 - t) * d) / s, k2 = Math.sin(t * d) / s;
-    return [a[0] * k1 + b[0] * k2, a[1] * k1 + b[1] * k2, a[2] * k1 + b[2] * k2];
-  };
+    { sym: "reAED", city: "UAE · Live", v: v3(25.2, 55.3), live: true, side: 1 },
+    { sym: "reSAR", city: "Saudi Arabia", v: v3(24.7, 46.7), side: -1 },
+    { sym: "reINR", city: "India", v: v3(19.1, 72.9), side: 1 },
+    { sym: "reEUR", city: "Eurozone", v: v3(50.1, 8.7), side: 1 },
+    { sym: "reGBP", city: "United Kingdom", v: v3(51.5, -0.1), side: -1 },
+    { sym: "reUSD", city: "United States", v: v3(40.7, -74), side: -1 },
+    { sym: "reSGD", city: "Singapore", v: v3(1.35, 103.8), side: 1 },
+    { sym: "reJPY", city: "Japan", v: v3(35.7, 139.7), side: 1 },
+    { sym: "Your currency", city: "Any fiat peg", v: v3(-23.5, -46.6), you: true, side: 1 },
+    { sym: "Your currency", city: "Any fiat peg", v: v3(-26.2, 28), you: true, side: 1 },
+    { sym: "Your currency", city: "Any fiat peg", v: v3(-33.9, 151.2), you: true, side: -1 },
+  ] as { sym: string; city: string; v: readonly number[]; live?: boolean; you?: boolean; side: number }[];
   let t = 0, last = performance.now();
   const frame = (now: number) => {
     if (!alive) return;
@@ -306,9 +309,9 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
     if (run && W > 0) {
       if (!reduced) t += dt;
       px += (tpx - px) * 0.05; py += (tpy - py) * 0.05;
-      const rot = (-30 + Math.sin(t * 0.12) * 40 + px * 25) * RAD, tilt = (36 + py * 10) * RAD;
+      const rot = (-(30 + Math.sin(t * 0.1) * 80) + px * 25) * RAD, tilt = (22 + py * 10) * RAD;
       const cr = Math.cos(rot), sr = Math.sin(rot), ct = Math.cos(tilt), st = Math.sin(tilt);
-      const R = Math.min(W, H) * 0.42, cx = W * 0.5, cy = H * 0.52;
+      const R = Math.min(W, H) * 0.38, cx = W * 0.5, cy = H * 0.57;
       const P = (v: readonly number[], lift = 1) => {
         const X = v[0] * cr + v[2] * sr, Z0 = -v[0] * sr + v[2] * cr;
         const Y = v[1] * ct - Z0 * st, Z = v[1] * st + Z0 * ct;
@@ -337,55 +340,70 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
           x.fillRect(p[0] - 0.6, p[1] - 0.6, 1.2, 1.2);
         }
       }
-      // arcs
-      const hp = P(hub.v);
-      nodes.forEach((n, i) => {
-        const SEG = 48;
-        x.beginPath();
-        let started = false;
-        for (let k = 0; k <= SEG; k++) {
-          const u = k / SEG, q = P(slerp(hub.v, n.v, u), 1 + Math.sin(Math.PI * u) * 0.22);
-          if (q[2] < -0.15) { started = false; continue; }
-          if (!started) { x.moveTo(q[0], q[1]); started = true; } else x.lineTo(q[0], q[1]);
-        }
-        x.strokeStyle = n.live ? "rgba(31,91,255,.75)" : "rgba(31,91,255,.35)";
-        x.lineWidth = n.live ? 1.8 : 1.2;
+      // INFRA core sits in front of the globe; links fan out to each visible currency network.
+      const hs = Math.max(24, R * 0.13), hx = cx, hy = cy - R - hs * 0.35;
+      const pts = nodes.map((n) => ({ n, p: P(n.v) }));
+      pts.forEach(({ n, p }, i) => {
+        if (p[2] < 0.12) return;
+        const a = Math.min(1, (p[2] - 0.12) * 3);
+        const mx = (hx + p[0]) / 2, my = (hy + p[1]) / 2;
+        const dx = p[0] - hx, dy = p[1] - hy, L = Math.hypot(dx, dy) || 1;
+        const qx = mx - (dy / L) * L * 0.18, qy = my + (dx / L) * L * 0.18 - L * 0.12;
+        x.globalAlpha = a;
+        x.beginPath(); x.moveTo(hx, hy); x.quadraticCurveTo(qx, qy, p[0], p[1]);
+        x.strokeStyle = n.live ? "rgba(31,91,255,.85)" : n.you ? "rgba(10,11,14,.25)" : "rgba(31,91,255,.4)";
+        x.lineWidth = n.live ? 2 : 1.2;
         x.setLineDash(n.live ? [] : [4, 4]); x.stroke(); x.setLineDash([]);
-        // packets
-        for (let k = 0; k < 2; k++) {
-          const u = ((t * (n.live ? 0.45 : 0.3) + i * 0.27 + k * 0.5) % 1);
-          const q = P(slerp(hub.v, n.v, u), 1 + Math.sin(Math.PI * u) * 0.22);
-          if (q[2] < -0.15) continue;
-          x.fillStyle = "#1F5BFF"; x.beginPath(); x.arc(q[0], q[1], 2.6, 0, 7); x.fill();
-          x.fillStyle = "rgba(31,91,255,.18)"; x.beginPath(); x.arc(q[0], q[1], 6, 0, 7); x.fill();
+        if (!n.you) {
+          for (let k = 0; k < (n.live ? 3 : 1); k++) {
+            const u = (t * (n.live ? 0.55 : 0.35) + i * 0.17 + k / 3) % 1, iu = 1 - u;
+            const bx = iu * iu * hx + 2 * iu * u * qx + u * u * p[0], by = iu * iu * hy + 2 * iu * u * qy + u * u * p[1];
+            x.fillStyle = "rgba(31,91,255,.18)"; x.beginPath(); x.arc(bx, by, 6, 0, 7); x.fill();
+            x.fillStyle = "#1F5BFF"; x.beginPath(); x.arc(bx, by, 2.4, 0, 7); x.fill();
+          }
         }
+        x.globalAlpha = 1;
       });
       // markers + labels
-      const label = (p: readonly number[], sym: string, city: string, live: boolean, big = false, left = false, below = false) => {
-        if (p[2] < 0.05) return;
-        const pulse = (t * 0.8) % 1;
-        if (live) { x.strokeStyle = `rgba(31,91,255,${0.6 * (1 - pulse)})`; x.lineWidth = 1.5; x.beginPath(); x.arc(p[0], p[1], 5 + pulse * (big ? 22 : 14), 0, 7); x.stroke(); }
-        x.fillStyle = live ? "#1F5BFF" : "#0A0B0E"; x.beginPath(); x.arc(p[0], p[1], big ? 5 : 3.5, 0, 7); x.fill();
-        x.fillStyle = "#fff"; x.beginPath(); x.arc(p[0], p[1], big ? 2 : 1.4, 0, 7); x.fill();
-        x.font = `600 ${big ? 13 : 12}px ${FS}`;
-        const w1 = x.measureText(sym).width;
-        x.font = `500 9.5px ${FM}`;
-        const w2 = x.measureText(city.toUpperCase()).width;
-        const bw = Math.max(w1, w2) + 20, bh = 36;
-        const bx = Math.max(4, Math.min(W - bw - 4, left ? p[0] - bw - 10 : p[0] + 10)), by = below ? Math.min(H - bh - 4, p[1] + 12) : Math.max(4, p[1] - bh - 8);
-        x.globalAlpha = Math.min(1, p[2] * 3);
-        x.fillStyle = live ? "#1F5BFF" : "rgba(255,255,255,.95)";
-        x.strokeStyle = live ? "#1F5BFF" : "rgba(10,11,14,.1)";
+      const pulse = (t * 0.8) % 1;
+      const label = (p: readonly number[], n: (typeof nodes)[number]) => {
+        if (p[2] < 0.12) return;
+        x.globalAlpha = Math.min(1, (p[2] - 0.12) * 3);
+        if (n.live) { x.strokeStyle = `rgba(31,91,255,${0.6 * (1 - pulse)})`; x.lineWidth = 1.5; x.beginPath(); x.arc(p[0], p[1], 5 + pulse * 18, 0, 7); x.stroke(); }
+        x.fillStyle = n.live ? "#1F5BFF" : n.you ? "#9AA3B2" : "#0A0B0E"; x.beginPath(); x.arc(p[0], p[1], n.live ? 5 : 3.5, 0, 7); x.fill();
+        x.fillStyle = "#fff"; x.beginPath(); x.arc(p[0], p[1], n.live ? 2 : 1.3, 0, 7); x.fill();
+        const top = n.you ? "+ " + n.sym : n.sym;
+        x.font = `600 12px ${FS}`; const w1 = x.measureText(top).width;
+        x.font = `500 9px ${FM}`; const w2 = x.measureText(n.city.toUpperCase()).width;
+        const bw = Math.max(w1, w2) + 18, bh = 34;
+        const bx = Math.max(4, Math.min(W - bw - 4, n.side < 0 ? p[0] - bw - 9 : p[0] + 9)), by = Math.max(4, Math.min(H - bh - 4, p[1] - bh / 2));
+        x.fillStyle = n.live ? "#1F5BFF" : "rgba(255,255,255,.96)";
+        x.strokeStyle = n.live ? "#1F5BFF" : n.you ? "rgba(10,11,14,.25)" : "rgba(10,11,14,.1)";
+        x.setLineDash(n.you ? [3, 3] : []);
         x.beginPath();
-        const r = 9;
+        const r = 8;
         x.moveTo(bx + r, by); x.arcTo(bx + bw, by, bx + bw, by + bh, r); x.arcTo(bx + bw, by + bh, bx, by + bh, r); x.arcTo(bx, by + bh, bx, by, r); x.arcTo(bx, by, bx + bw, by, r);
-        x.closePath(); x.fill(); x.stroke();
-        x.fillStyle = live ? "#fff" : "#0A0B0E"; x.font = `600 ${big ? 13 : 12}px ${FS}`; x.fillText(sym, bx + 10, by + 16);
-        x.fillStyle = live ? "rgba(255,255,255,.75)" : "rgba(10,11,14,.5)"; x.font = `500 9.5px ${FM}`; x.fillText(city.toUpperCase(), bx + 10, by + 29);
+        x.closePath(); x.fill(); x.stroke(); x.setLineDash([]);
+        x.fillStyle = n.live ? "#fff" : n.you ? "#1F5BFF" : "#0A0B0E"; x.font = `600 12px ${FS}`; x.fillText(top, bx + 9, by + 15);
+        x.fillStyle = n.live ? "rgba(255,255,255,.78)" : "rgba(10,11,14,.5)"; x.font = `500 9px ${FM}`; x.fillText(n.city.toUpperCase(), bx + 9, by + 27);
         x.globalAlpha = 1;
       };
-      nodes.forEach((n) => label(P(n.v), n.sym, n.city, false, false, n.left));
-      label(hp, "reAED · Live", "Dubai · INFRA hub", true, true, hp[0] > cx + R * 0.35, true);
+      [...pts].sort((a, b) => a.p[2] - b.p[2]).forEach(({ n, p }) => label(p, n));
+      // INFRA core badge
+      x.save(); x.translate(hx, hy);
+      x.strokeStyle = `rgba(31,91,255,${0.5 * (1 - pulse)})`; x.lineWidth = 1.5;
+      x.beginPath(); x.arc(0, 0, hs * (1.1 + pulse * 0.9), 0, 7); x.stroke();
+      x.rotate(Math.PI / 4);
+      x.fillStyle = "#0A0B0E"; x.strokeStyle = "rgba(31,91,255,.7)"; x.lineWidth = 1.5;
+      x.beginPath();
+      const rr = hs * 0.28, e = hs * 0.82;
+      x.moveTo(-e + rr, -e); x.arcTo(e, -e, e, e, rr); x.arcTo(e, e, -e, e, rr); x.arcTo(-e, e, -e, -e, rr); x.arcTo(-e, -e, e, -e, rr);
+      x.closePath(); x.fill(); x.stroke();
+      x.restore();
+      x.fillStyle = "#fff"; x.textAlign = "center";
+      x.font = `700 ${Math.round(hs * 0.42)}px ${FS}`; x.fillText("INFRA", hx, hy + hs * 0.08);
+      x.fillStyle = "rgba(255,255,255,.6)"; x.font = `500 ${Math.max(7, Math.round(hs * 0.2))}px ${FM}`; x.fillText("CORE · L1", hx, hy + hs * 0.38);
+      x.textAlign = "start";
     }
     if (!reduced) raf = requestAnimationFrame(frame);
   };
