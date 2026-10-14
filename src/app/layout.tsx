@@ -1,5 +1,6 @@
+// Root layout: global metadata/SEO, fonts, theme bootstrap script (no flash), Organization/WebSite JSON-LD.
 import type { Metadata, Viewport } from "next";
-import { JsonLd } from "@/components/site/JsonLd";
+import { JsonLd } from "@/components/common/JsonLd";
 import { KEYWORDS, SITE_URL, orgJsonLd, siteJsonLd } from "@/lib/seo";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
@@ -42,6 +43,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { themeColor: "#1F5BFF", width: "device-width", initialScale: 1 };
 
+/** Wraps every page. The inline <head> script restores the saved theme and hides the hero until its intro animation starts. */
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>

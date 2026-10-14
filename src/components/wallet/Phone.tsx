@@ -3,6 +3,7 @@ const LOGO = "/wallet/infra-wallet-logo.png";
 
 type TokKey = "reAED" | "WreAED" | "USDT" | "USDC" | "BNB";
 
+/** Token icon (INFRA logo for reAED, coloured letter badge otherwise). */
 function Tok({ k }: { k: TokKey }) {
   if (k === "reAED") {
     // eslint-disable-next-line @next/next/no-img-element
@@ -17,10 +18,12 @@ function Tok({ k }: { k: TokKey }) {
   return <span className="tk" style={{ background: m[k][0] }}>{m[k][1]}</span>;
 }
 
+/** Phone status bar. */
 const Bar = () => (
   <div className="ph-bar"><b>9:41</b><span className="ph-isl" /><i /></div>
 );
 
+/** Bottom tab bar; `on` = active tab index. */
 const Nav = ({ on }: { on: number }) => (
   <div className="ph-nav">
     {["▣", "◷", "⇄", "◎", "⚙"].map((c, i) => (
@@ -29,6 +32,7 @@ const Nav = ({ on }: { on: number }) => (
   </div>
 );
 
+/** Network chip with the INFRA logo. */
 const Net = ({ label, big = false }: { label: string; big?: boolean }) => (
   <span className={`ph-net${big ? " lg" : ""}`}>
     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -37,6 +41,7 @@ const Net = ({ label, big = false }: { label: string; big?: boolean }) => (
   </span>
 );
 
+/** Portfolio screen. */
 function Home() {
   const toks: [TokKey, string, string, string][] = [
     ["reAED", "132 reAED", "AED 132.00", "$35.94"],
@@ -73,6 +78,7 @@ function Home() {
   );
 }
 
+/** Swap screen. */
 function Swap() {
   return (
     <>
@@ -92,6 +98,7 @@ function Swap() {
   );
 }
 
+/** Bridge screen. */
 function Bridge() {
   return (
     <>
@@ -107,6 +114,7 @@ function Bridge() {
   );
 }
 
+/** Activity / history screen. */
 function Activity() {
   const rows = [
     ["Sent reAED", "To: 0xd965…fc94", "−20.00", "reAED"],
@@ -137,6 +145,7 @@ function Activity() {
   );
 }
 
+/** Settings screen. */
 function Settings() {
   const items = [["Wallet management", "Imported 2"], ["Address book", ""], ["reID Connect", ""], ["Networks", "INFRA Network"], ["Primary currency", "AED"], ["Secondary currency", "USD"], ["Face ID & passcode", "On"], ["Language", "English"]];
   return (
@@ -154,6 +163,7 @@ function Settings() {
 
 const screens = { home: Home, swap: Swap, bridge: Bridge, activity: Activity, settings: Settings };
 
+/** Phone frame that renders one of the screens above. */
 export function Phone({ screen, className = "" }: { screen: keyof typeof screens; className?: string }) {
   const S = screens[screen];
   return (

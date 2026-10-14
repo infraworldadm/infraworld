@@ -1,5 +1,7 @@
+// Web app manifest (/manifest.webmanifest).
 import type { MetadataRoute } from "next";
 
+/** PWA manifest: name, colours and icon. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "INFRA — Pegged Stablecoin Network Infrastructure",

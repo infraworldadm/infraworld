@@ -1,20 +1,22 @@
+// / — INFRA Global home page (platform overview, networks, technology, FAQ, contact).
 import { Navigation } from "@/components/layout/Navigation";
-import { JsonLd } from "@/components/site/JsonLd";
+import { JsonLd } from "@/components/common/JsonLd";
 import { SITE_URL, abs, faqJsonLd } from "@/lib/seo";
 
 import { Footer } from "@/components/layout/Footer";
-import { GlobalHero } from "@/components/sections/GlobalHero";
-import { Infra } from "@/components/sections/Infra";
-import { EnterpriseProgramStructure } from "@/components/sections/EnterpriseProgramStructure";
-import { RiskAlignment } from "@/components/sections/RiskAlignment";
-import { InfrastructureChallenges } from "@/components/sections/InfrastructureChallenges";
-import { Technology } from "@/components/sections/Technology";
-import { FAQ } from "@/components/sections/FAQ";
-import { globalFaq } from "@/lib/faq";
-import { Contact } from "@/components/sections/Contact";
-import { Effects } from "@/components/site/Effects";
-import { IconSprite } from "@/components/site/ui";
+import { GlobalHero } from "@/components/sections/home/GlobalHero";
+import { Infra } from "@/components/sections/home/Infra";
+import { EnterpriseProgramStructure } from "@/components/sections/home/EnterpriseProgramStructure";
+import { RiskAlignment } from "@/components/sections/home/RiskAlignment";
+import { InfrastructureChallenges } from "@/components/sections/home/InfrastructureChallenges";
+import { Technology } from "@/components/sections/home/Technology";
+import { FAQ } from "@/components/sections/shared/FAQ";
+import { globalFaq } from "@/content/faq";
+import { Contact } from "@/components/sections/shared/Contact";
+import { Effects } from "@/components/common/Effects";
+import { IconSprite } from "@/components/common/ui";
 
+/** Home page composition. Effects mounts all scroll/intro animations for this page. */
 export default function Home() {
   return (
     <>

@@ -1,7 +1,8 @@
+// /privacy-policy — wallet privacy policy (App Store / Google Play). Company details: config/legal.ts.
 import type { Metadata } from "next";
 import { SubPage } from "@/components/layout/SubPage";
-import { Lbl } from "@/components/site/ui";
-import { LEGAL } from "@/lib/legal";
+import { Lbl } from "@/components/common/ui";
+import { LEGAL } from "@/config/legal";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 
 const { entity: E, product: P, email: M, site: S } = LEGAL;
 
+/** Privacy policy content. Keep section ids stable — store listings may deep-link (#data-deletion). */
 export default function PrivacyPolicy() {
   return (
     <SubPage>

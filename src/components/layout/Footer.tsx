@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages -- full page loads so home-page effects and hash scrolling initialise */
-import { BuildCta } from "@/components/site/BuildCta";
-import { FloatingBuild } from "@/components/site/FloatingBuild";
-import { BUILD_FORM_URL } from "@/lib/links";
+import { BuildCta } from "@/components/common/BuildCta";
+import { FloatingBuild } from "@/components/common/FloatingBuild";
+import { BUILD_FORM_URL } from "@/config/links";
 
 const COLS: { title: string; links: [string, string][] }[] = [
   { title: "Platform", links: [["INFRA", "/#infra"], ["Networks", "/#networks"], ["reAED", "/reaed"], ["Technology", "/#technology"], ["FAQ", "/#faq"]] },
@@ -10,6 +10,7 @@ const COLS: { title: string; links: [string, string][] }[] = [
   { title: "Legal", links: [["Privacy Policy", "/privacy-policy"], ["Terms & Conditions", "/terms"]] },
 ];
 
+/** Site footer. Pass cta={false} to hide the Build banner and floating button (e.g. on /build). */
 export function Footer({ cta = true }: { cta?: boolean }) {
   return (
     <>

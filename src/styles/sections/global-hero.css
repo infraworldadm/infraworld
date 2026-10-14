@@ -1,0 +1,25 @@
+/* ---- INFRA Global hero: network-of-networks stage ---- */
+.gstage { position: absolute; inset: 4% 2%; width: 96%; height: 92%; overflow: visible; text-transform: none }
+.gstage text { text-transform: none; letter-spacing: normal }
+.g-orbit { fill: none; stroke: rgba(10, 11, 14, .08); stroke-dasharray: 2 6; transform-origin: 260px 230px; animation: gspin 60s linear infinite }
+.g-orbit2 { animation-duration: 40s; animation-direction: reverse; stroke: rgba(31, 91, 255, .18) }
+.g-link { stroke: rgba(10, 11, 14, .16); stroke-width: 1.2; stroke-dasharray: 4 5; fill: none }
+.g-link.live { stroke: rgba(31, 91, 255, .55); stroke-dasharray: none; stroke-width: 1.6 }
+.g-pk { fill: rgba(10, 11, 14, .35) }
+.g-pk.live { fill: var(--blue) }
+.g-node rect { fill: #fff; stroke: var(--line-2); stroke-width: 1 }
+.g-node.live rect { fill: var(--blue); stroke: var(--blue) }
+.g-sym { font-family: var(--f); font-size: 17px; font-weight: 600; letter-spacing: -.02em; fill: var(--t1) }
+.g-cur { font-family: var(--m); font-size: 9.5px; letter-spacing: .04em; fill: var(--t3) }
+.g-node.live .g-sym { fill: #fff }
+.g-node.live .g-cur { fill: rgba(255, 255, 255, .78) }
+.g-ping { fill: none; stroke: var(--blue); stroke-width: 1.5; transform-origin: center; transform-box: fill-box; animation: gping 2.4s cubic-bezier(.16, 1, .3, 1) infinite }
+.g-core-b { fill: var(--black); stroke: rgba(31, 91, 255, .6); stroke-width: 1.5 }
+.g-core-t { font-family: var(--f); font-size: 22px; font-weight: 700; letter-spacing: .04em; fill: #fff }
+.g-core-s { font-family: var(--m); font-size: 9px; letter-spacing: .06em; fill: rgba(255, 255, 255, .6) }
+.g-core { animation: gfloat 5s ease-in-out infinite }
+@keyframes gspin { to { transform: rotate(360deg) } }
+@keyframes gping { from { transform: scale(.7); opacity: .9 } to { transform: scale(1.5); opacity: 0 } }
+@keyframes gfloat { 50% { transform: translate(260px, 222px) } }
+.g-core { transform: translate(260px, 230px) }
+@media (max-width: 680px) { .gstage { inset: 10% 0 4%; width: 100%; height: 86% } }

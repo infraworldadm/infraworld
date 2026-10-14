@@ -1,13 +1,16 @@
+// GET /api/infra/balances — reads reAED balances of the six fee-distribution pools from the INFRA RPC.
 import { NextResponse } from "next/server";
-import { FEE_MANAGER, POOLS } from "@/lib/pools";
+import { FEE_MANAGER, POOLS } from "@/config/pools";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 10;
 
 const TARGET_RPC = "https://uat.infraworld.org/";
 
+/** Returns { pools: { key: weiString }, feeManager, updatedAt } or a 500 with an error message. */
 export async function GET() {
   try {
+    /** Fetches one address balance (wei, as a decimal string) via JSON-RPC eth_getBalance. */
     const getBalance = async (address: string, id: number) => {
       const res = await fetch(TARGET_RPC, {
         method: "POST",

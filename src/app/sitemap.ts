@@ -1,6 +1,8 @@
+// sitemap.xml — add new public routes here.
 import type { MetadataRoute } from "next";
 import { abs } from "@/lib/seo";
 
+/** Lists every public route with priority and change frequency. */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   const pages: [string, number, MetadataRoute.Sitemap[number]["changeFrequency"]][] = [

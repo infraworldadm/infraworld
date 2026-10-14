@@ -1,5 +1,6 @@
 /* Canvas renderers for the INFRA site. Each returns a cleanup function. */
 
+/** True when the site is in dark mode (canvases re-read this every frame). */
 const isDark = () => document.documentElement.dataset.theme === "dark";
 
 type FieldOpts = { cols: number; rows: number; packets: number; horizon: number; cx: number; width: number; dark: boolean };
@@ -12,6 +13,7 @@ export function dotField(cv: HTMLCanvasElement, opt: FieldOpts, reduced: boolean
   let mx = -9, my = -9, tmx = -9, tmy = -9;
   const D = Math.min(window.devicePixelRatio || 1, window.matchMedia("(pointer:coarse)").matches ? 1.5 : 2);
   let lastW = -1, lastH = -1;
+  /** Matches the canvas backing store to its CSS size × device pixel ratio. */
   const size = () => {
     const b = cv.getBoundingClientRect();
     if (b.width === lastW && b.height === lastH) return;
@@ -20,7 +22,9 @@ export function dotField(cv: HTMLCanvasElement, opt: FieldOpts, reduced: boolean
   };
   size();
   const host = cv.parentElement!;
+  /** Tracks pointer position (0–1) for the ripple effect. */
   const onMove = (e: PointerEvent) => { const b = cv.getBoundingClientRect(); tmx = (e.clientX - b.left) / W; tmy = (e.clientY - b.top) / H; };
+  /** Resets the ripple when the pointer leaves. */
   const onLeave = () => { tmx = tmy = -9; };
   host.addEventListener("pointermove", onMove);
   host.addEventListener("pointerleave", onLeave);
@@ -31,12 +35,14 @@ export function dotField(cv: HTMLCanvasElement, opt: FieldOpts, reduced: boolean
   io.observe(cv);
   const { cols: COLS, rows: ROWS } = opt;
   const pk = Array.from({ length: opt.packets }, () => ({ r: (Math.random() * ROWS) | 0, c: Math.random() * COLS, s: 0.08 + Math.random() * 0.18 }));
+  /** Terrain height at grid point (u,z), plus the pointer ripple. */
   const height = (u: number, z: number, px: number, py0: number) => {
     let h = Math.sin(u * 7 + t) * 0.5 + Math.sin(z * 6 - t * 1.3) * 0.5 + Math.sin((u + z) * 4 + t * 0.7) * 0.4;
     const dx = px / W - mx, dy = py0 / H - my;
     h += Math.max(0, 1 - Math.sqrt(dx * dx + dy * dy) * 5) * 2.2;
     return h;
   };
+  /** Draws one frame (skipped while off-screen). */
   const draw = () => {
     if (!alive) return;
     if (run) {
@@ -85,6 +91,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
   let mx = 0, my = 0, tmx = 0, tmy = 0;
   const D = Math.min(window.devicePixelRatio || 1, window.matchMedia("(pointer:coarse)").matches ? 1.5 : 2);
   let lastW = -1, lastH = -1;
+  /** Matches the canvas backing store to its CSS size; recomputes cube size. */
   const size = () => { const b = cv.getBoundingClientRect(); if (b.width === lastW && b.height === lastH) return; lastW = b.width; lastH = b.height; W = b.width; H = b.height; cv.width = W * D; cv.height = H * D; s = Math.min(W * 0.115, H * 0.17); };
   size();
   const ro = new ResizeObserver(() => { size(); if (reduced && started) frame(performance.now()); });
@@ -93,7 +100,9 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
   const io = new IntersectionObserver(([e]) => { run = e.isIntersecting; if (run && reduced && started) frame(performance.now()); });
   io.observe(cv);
   const host = cv.parentElement!;
+  /** Pointer parallax input (−0.5…0.5). */
   const onMove = (e: PointerEvent) => { const b = cv.getBoundingClientRect(); tmx = (e.clientX - b.left) / W - 0.5; tmy = (e.clientY - b.top) / H - 0.5; };
+  /** Resets parallax. */
   const onLeave = () => { tmx = tmy = 0; };
   host.addEventListener("pointermove", onMove);
   host.addEventListener("pointerleave", onLeave);
@@ -103,19 +112,24 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
   const FM = cs.getPropertyValue("--font-geist-mono").trim() || "ui-monospace, monospace";
   const C = Math.cos(Math.PI / 6), S = Math.sin(Math.PI / 6), G = 1.62, N = 5;
   let ox = 0, oy = 0;
+  /** Isometric projection: world (X,Y,Z) → canvas pixels. */
   const P = (X: number, Y: number, Z: number): [number, number] => [ox + (X - Y) * C * s, oy + (X + Y) * S * s - Z * s];
   let hgt = 1284512;
   let blocks = Array.from({ length: N }, (_, j) => ({ h: hgt - (N - 1) + j, X: (j - (N - 1)) * G }));
   const parts: { x: number; y: number; t: number; sp: number }[] = [];
   let tx = 0, cyc = 0, phase = 0, dropZ = 3.4, slide = 0;
+  /** Ease-out cubic. */
   const ez = (t: number) => 1 - Math.pow(1 - t, 3);
+  /** Ease-out back (overshoot) for the block drop. */
   const eb = (t: number) => { const c = 1.4; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
 
+  /** Fills and strokes a polygon. */
   const poly = (pts: [number, number][], fill: string, stroke: string) => {
     x.beginPath(); x.moveTo(pts[0][0], pts[0][1]);
     for (let i = 1; i < pts.length; i++) x.lineTo(pts[i][0], pts[i][1]);
     x.closePath(); x.fillStyle = fill; x.fill(); x.strokeStyle = stroke; x.lineWidth = 1; x.stroke();
   };
+  /** Draws one isometric block with its "#height · 10 AED" label. */
   const cube = (X: number, z: number, blue: boolean, a: number, label: number) => {
     x.globalAlpha = a;
     const dk = isDark();
@@ -142,6 +156,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     x.setTransform(D, 0, 0, D, 0, 0);
     x.globalAlpha = 1;
   };
+  /** Dashed link between two blocks. */
   const link = (X1: number, a: number) => {
     x.globalAlpha = a;
     const p1 = P(X1 + 1, 0.5, 0.5), p2 = P(X1 + G, 0.5, 0.5);
@@ -149,6 +164,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     x.beginPath(); x.moveTo(p1[0], p1[1]); x.lineTo(p2[0], p2[1]); x.stroke(); x.setLineDash([]);
     x.globalAlpha = 1;
   };
+  /** Pulsing dashed outline where the next block will land. */
   const ghost = (X: number, t: number) => {
     x.strokeStyle = `rgba(31,91,255,${0.35 + Math.sin(t * 6) * 0.2})`; x.lineWidth = 1.2; x.setLineDash([4, 4]);
     const e: [number, number, number][][] = [
@@ -160,6 +176,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     for (const [a, b] of e) { const p = P(...a), q = P(...b); x.moveTo(p[0], p[1]); x.lineTo(q[0], q[1]); }
     x.stroke(); x.setLineDash([]);
   };
+  /** Isometric floor grid. */
   const floor = () => {
     x.strokeStyle = isDark() ? "rgba(255,255,255,.06)" : "rgba(10,11,14,.06)"; x.lineWidth = 1;
     for (let i = -9; i <= 4; i++) { const a = P(i * G * 0.5, -1.5, 0), b = P(i * G * 0.5, 2.5, 0); x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.stroke(); }
@@ -167,6 +184,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
   };
 
   let last = performance.now();
+  /** Animation loop: stream → drop → seal → slide, repeating. */
   const frame = (now: number) => {
     if (!alive) return;
     const dt = Math.min(0.05, (now - last) / 1000);
@@ -220,6 +238,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     }
     if (!reduced) raf = requestAnimationFrame(frame);
   };
+  /** Starts the loop once (after fonts or a 400ms fallback). */
   const start = () => { if (started || !alive) return; started = true; raf = requestAnimationFrame(frame); };
   // iOS Safari's document.fonts.ready can stay pending — never block the animation on it.
   document.fonts?.ready.then(start);
@@ -238,6 +257,7 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
   const D = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
   let W = 0, H = 0, run = true, alive = true, raf = 0, lastW = -1, lastH = -1;
   let px = 0, py = 0, tpx = 0, tpy = 0;
+  /** Matches the canvas backing store to its CSS size × DPR. */
   const size = () => {
     const b = cv.getBoundingClientRect();
     if (b.width === lastW && b.height === lastH) return;
@@ -250,7 +270,9 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
   const io = new IntersectionObserver(([e]) => { run = e.isIntersecting; if (run && reduced) frame(performance.now()); });
   io.observe(cv);
   const host = cv.parentElement!;
+  /** Pointer parallax input. */
   const onMove = (e: PointerEvent) => { const b = cv.getBoundingClientRect(); tpx = (e.clientX - b.left) / W - 0.5; tpy = (e.clientY - b.top) / H - 0.5; };
+  /** Resets parallax. */
   const onLeave = () => { tpx = tpy = 0; };
   host.addEventListener("pointermove", onMove);
   host.addEventListener("pointerleave", onLeave);
@@ -273,6 +295,7 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
     [[95,5],[105,-6],[120,-9],[140,-8],[130,-2],[118,5],[108,2]],
     [[130,31],[141,36],[142,45],[139,40]],
   ];
+  /** Point-in-polygon test (ray casting) in lon/lat space. */
   const inPoly = (lon: number, lat: number, poly: number[][]) => {
     let c = false;
     for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
@@ -290,6 +313,7 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
     const land = LAND.some((pl) => inPoly(lon, lat, pl));
     if (land || i % 4 === 0) dots.push({ v, land });
   }
+  /** Lat/lon (degrees) → unit vector on the sphere. */
   const v3 = (lat: number, lon: number) => [Math.cos(lat * RAD) * Math.sin(lon * RAD), Math.sin(lat * RAD), Math.cos(lat * RAD) * Math.cos(lon * RAD)] as const;
   // Currency networks INFRA can launch. side: label placement (-1 left, 1 right).
   const nodes = [
@@ -306,6 +330,7 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
     { sym: "Your currency", city: "Any fiat peg", v: v3(-33.9, 151.2), you: true, side: -1 },
   ] as { sym: string; city: string; v: readonly number[]; live?: boolean; you?: boolean; side: number }[];
   let t = 0, last = performance.now();
+  /** Draws one globe frame: atmosphere, dots, links from the INFRA core, labels, core badge. */
   const frame = (now: number) => {
     if (!alive) return;
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
@@ -315,6 +340,7 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
       const rot = (-(30 + Math.sin(t * 0.1) * 80) + px * 25) * RAD, tilt = (22 + py * 10) * RAD;
       const cr = Math.cos(rot), sr = Math.sin(rot), ct = Math.cos(tilt), st = Math.sin(tilt);
       const R = Math.min(W, H) * 0.38, cx = W * 0.5, cy = H * 0.57;
+      /** Rotates/tilts a sphere point and projects it; returns [x, y, depth]. */
       const P = (v: readonly number[], lift = 1) => {
         const X = v[0] * cr + v[2] * sr, Z0 = -v[0] * sr + v[2] * cr;
         const Y = v[1] * ct - Z0 * st, Z = v[1] * st + Z0 * ct;
@@ -370,6 +396,7 @@ export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
       });
       // markers + labels
       const pulse = (t * 0.8) % 1;
+      /** Draws a currency marker and its label pill (skipped when on the far side). */
       const label = (p: readonly number[], n: (typeof nodes)[number]) => {
         if (p[2] < 0.12) return;
         x.globalAlpha = Math.min(1, (p[2] - 0.12) * 3);

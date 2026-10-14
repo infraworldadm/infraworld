@@ -1,5 +1,6 @@
-import type { FaqItem } from "@/lib/faq";
+import type { FaqItem } from "@/content/faq";
 
+/** Canonical site origin (override with NEXT_PUBLIC_SITE_URL). */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://infraworld.org").replace(/\/$/, "");
 export const SITE_NAME = "INFRA";
 
@@ -31,6 +32,7 @@ export const KEYWORDS = [
   "MENA blockchain infrastructure",
 ];
 
+/** Absolute URL for a path on the site. */
 export const abs = (path = "/") => `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 
 export const orgJsonLd = {
@@ -58,12 +60,14 @@ export const siteJsonLd = {
   inLanguage: "en",
 };
 
+/** FAQPage structured data from FAQ items. */
 export const faqJsonLd = (items: FaqItem[]) => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: items.map((f) => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })),
 });
 
+/** Two-level breadcrumb structured data. */
 export const breadcrumbJsonLd = (name: string, path: string) => ({
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",

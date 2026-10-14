@@ -1,0 +1,122 @@
+html, body { overflow-x: clip }
+html.lenis, html.lenis body { height: auto }
+.lenis.lenis-smooth { scroll-behavior: auto !important }
+.lenis.lenis-stopped { overflow: hidden }
+
+body { background: var(--field); color: var(--t1); font-family: var(--f); font-size: 16px; line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased }
+a { color: inherit; text-decoration: none }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 6px }
+::selection { background: var(--blue); color: #fff }
+h1, h2, h3, h4 { font-weight: 600; letter-spacing: -.035em; line-height: 1.02; text-wrap: balance; margin: 0 }
+h2 { font-size: clamp(1.9rem, 3.8vw, 3.2rem) }
+h3 { font-size: 1.08rem; letter-spacing: -.015em; line-height: 1.3; font-weight: 500 }
+p { margin: 0 }
+svg { display: inline-block }
+.wrap { max-width: 1320px; margin-inline: auto; padding-inline: clamp(12px, 2.6vw, 28px) }
+.lbl { font-family: var(--m); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); display: inline-flex; align-items: center; gap: 8px }
+.lbl.b { color: var(--blue) }
+.lbl i { width: 5px; height: 5px; background: currentColor }
+svg.i { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex: none }
+.tn { font-variant-numeric: tabular-nums }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0) }
+
+/* cursor */
+.cur { position: fixed; left: 0; top: 0; pointer-events: none; z-index: 300; display: none }
+.has-cursor .cur { display: block }
+.has-cursor, .has-cursor a, .has-cursor button { cursor: none }
+.has-cursor input { cursor: ew-resize }
+#cd { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--blue) }
+#cr { width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 1px solid rgba(10, 11, 14, .35); display: grid; place-items: center; transition: width .5s var(--ease), height .5s var(--ease), margin .5s var(--ease), background .4s, border-color .4s }
+#cr span { font-family: var(--m); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: #fff; opacity: 0; transition: opacity .2s }
+#cr.h { width: 56px; height: 56px; margin: -28px 0 0 -28px; border-color: var(--blue); background: rgba(31, 91, 255, .08) }
+#cr.l { width: 84px; height: 84px; margin: -42px 0 0 -42px; background: var(--blue); border-color: var(--blue) }
+#cr.l span { opacity: 1 }
+
+/* ambient light */
+.amb { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden }
+.amb i { position: absolute; width: 62vmax; height: 62vmax; border-radius: 50%; background: radial-gradient(circle, rgba(31, 91, 255, .30), transparent 62%); filter: blur(40px) }
+.amb i:nth-child(1) { left: -24vmax; top: 20vh; animation: dr1 28s ease-in-out infinite alternate }
+.amb i:nth-child(2) { right: -28vmax; top: 60vh; opacity: .8; animation: dr2 34s ease-in-out infinite alternate }
+@keyframes dr1 { to { transform: translate(34vw, 30vh) scale(1.15) } }
+@keyframes dr2 { to { transform: translate(-38vw, -40vh) scale(.9) } }
+
+/* nav */
+.prog { position: fixed; left: 0; top: 0; height: 2px; width: 100%; background: var(--blue); transform-origin: 0 50%; transform: scaleX(0); z-index: 70 }
+.nav { position: fixed; left: 0; right: 0; top: 0; z-index: 60; padding-top: env(safe-area-inset-top, 0px); background: rgba(243, 245, 249, .78); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border-bottom: 1px solid transparent; transition: transform .6s var(--ease), border-color .4s }
+.nav.s { border-color: var(--line) }
+.nav.hide { transform: translateY(-100%) }
+.nav .wrap { display: flex; align-items: center; gap: 20px; height: 64px }
+.brand { display: flex; align-items: center }
+.brand img { height: 26px; width: auto; display: block }
+.links { display: flex; gap: 2px; margin-left: auto }
+.links a { position: relative; font-size: .875rem; color: var(--t2); padding: 8px 12px; transition: color .3s }
+.links a::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 1px; background: var(--blue); transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease) }
+.links a:hover, .links a.on { color: var(--t1) }
+.links a:hover::after, .links a.on::after { transform: scaleX(1); transform-origin: left }
+.menu-btn { display: none; margin-left: auto; width: 44px; height: 44px; align-items: center; justify-content: center; border: 1px solid var(--line-2); border-radius: 10px }
+.drawer { position: fixed; inset: 0; z-index: 58; background: var(--white); padding: calc(90px + env(safe-area-inset-top, 0px)) 20px calc(30px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; justify-content: flex-end; transform: translateY(-100%); transition: transform .8s var(--ease); visibility: hidden }
+.drawer.open { transform: none; visibility: visible }
+.drawer a { display: flex; justify-content: space-between; align-items: baseline; font-size: clamp(2rem, 9vw, 3rem); font-weight: 500; letter-spacing: -.04em; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.drawer a small { font-family: var(--m); font-size: .72rem; color: var(--t3); letter-spacing: 0 }
+
+/* buttons */
+.btn { position: relative; display: inline-flex; align-items: center; gap: 12px; height: 48px; padding: 0 20px; border-radius: 10px; font-size: .92rem; font-weight: 500; overflow: hidden; isolation: isolate; transition: color .4s var(--ease) }
+.btn .tx { position: relative; display: inline-block; overflow: hidden; height: 1.4em; line-height: 1.4em }
+.btn .tx span { display: block; transition: transform .55s var(--ease) }
+.btn .tx span + span { position: absolute; inset: 0; transform: translateY(100%) }
+.btn:hover .tx span:first-child { transform: translateY(-100%) }
+.btn:hover .tx span + span { transform: translateY(0) }
+.btn svg { width: 16px; height: 16px; transition: transform .55s var(--ease) }
+.btn:hover svg { transform: translateX(3px) }
+.btn::before { content: ""; position: absolute; inset: 0; z-index: -1; transform: scaleY(0); transform-origin: bottom; transition: transform .55s var(--ease) }
+.btn:hover::before { transform: scaleY(1) }
+.btn-k { background: var(--black); color: #fff }
+.btn-k::before { background: var(--blue) }
+.btn-o { border: 1px solid var(--line-2); color: var(--t1) }
+.btn-o::before { display: none }
+.btn-o:hover { border-color: var(--t1) }
+.btn-b { background: var(--blue); color: #fff }
+.btn-b::before { background: var(--black) }
+.btn-w { background: #fff; color: var(--t1) }
+.btn-w::before { background: var(--blue) }
+.btn-w:hover { color: #fff }
+.nav .btn { height: 40px; padding: 0 16px; font-size: .85rem }
+
+/* bento */
+.bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); grid-auto-flow: dense }
+.c3 { grid-column: span 3 } .c4 { grid-column: span 4 } .c5 { grid-column: span 5 } .c6 { grid-column: span 6 } .c7 { grid-column: span 7 } .c8 { grid-column: span 8 } .c12 { grid-column: span 12 } .r2 { grid-row: span 2 }
+.tile { position: relative; background: var(--white); border-radius: var(--r); padding: clamp(20px, 2.2vw, 30px); display: flex; flex-direction: column; gap: 14px; min-width: 0; isolation: isolate; overflow: hidden }
+.tile::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: radial-gradient(260px circle at var(--mx, -100px) var(--my, -100px), var(--blue), transparent 70%), linear-gradient(var(--line), var(--line)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); pointer-events: none; z-index: 2 }
+.tile p { color: var(--t2); font-size: .96rem }
+.dark { background: var(--black); color: #fff }
+.dark p { color: var(--w2) }
+.dark .lbl { color: var(--w3) }
+.dark::before { background: radial-gradient(260px circle at var(--mx, -100px) var(--my, -100px), var(--blue), transparent 70%), linear-gradient(var(--wl), var(--wl)) }
+.blue { background: var(--blue); color: #fff }
+.blue p { color: rgba(255, 255, 255, .8) }
+.blue .lbl { color: rgba(255, 255, 255, .72) }
+.blue::before { background: radial-gradient(260px circle at var(--mx, -100px) var(--my, -100px), #fff, transparent 70%), linear-gradient(rgba(255, 255, 255, .18), rgba(255, 255, 255, .18)) }
+.push { margin-top: auto }
+.ic { color: var(--blue) }
+.dark .ic, .blue .ic { color: #fff }
+.tag { display: inline-flex; align-self: flex-start; font-family: var(--m); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; padding: 5px 9px; border: 1px solid var(--line-2); border-radius: 6px; color: var(--t2) }
+.dark .tag { border-color: var(--wl); color: var(--w2) }
+.sec { padding-block: clamp(56px, 7vw, 96px) }
+.st2 { font-size: clamp(1.8rem, 3.4vw, 2.8rem) }
+
+/* hover inversion on content tiles */
+.tile.hv { transition: background .55s var(--ease), color .55s var(--ease) }
+.tile.hv .ic { transition: transform .7s var(--ease), color .4s }
+.tile.hv:hover { background: var(--black); color: #fff }
+.tile.hv:hover p { color: var(--w2) }
+.tile.hv:hover .ic { color: var(--blue-l); transform: translateY(-3px) rotate(-8deg) scale(1.15) }
+.tile.hv:hover .tag { border-color: var(--wl); color: #fff }
+.tile.hv:hover .lbl { color: var(--w3) }
+.tile.hv::after { content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease) }
+.tile.hv:hover::after { transform: scaleX(1) }
+
+/* animated glow border */
+@property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg }
+.tile.glow::before { padding: 1.5px; background: conic-gradient(from var(--ang), rgba(255, 255, 255, .08) 0 62%, #1F5BFF 78%, #9DB6FF 86%, rgba(255, 255, 255, .08) 100%); animation: spinb 5s linear infinite }
+@keyframes spinb { to { --ang: 360deg } }

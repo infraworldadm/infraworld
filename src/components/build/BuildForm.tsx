@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { BUILD_FORM_EMAIL } from "@/lib/links";
+import { BUILD_FORM_EMAIL } from "@/config/links";
 
 type Ans = Record<string, string | string[]>;
 type Q = {
@@ -15,10 +15,15 @@ type Q = {
   show?: (a: Ans) => boolean;
 };
 
+/** Returns the "what to launch" answer (A–E option text). */
 const L = (a: Ans) => String(a.launch || "");
+/** True for B (own currency network) or C (own chain). */
 const isNet = (a: Ans) => /^B|^C/.test(L(a));
+/** True for C (own dedicated chain). */
 const isChain = (a: Ans) => /^C/.test(L(a));
+/** True if answer `k` includes (multi) or starts with (single) `v`. */
 const has = (a: Ans, k: string, v: string) => (Array.isArray(a[k]) ? (a[k] as string[]).includes(v) : String(a[k] || "").startsWith(v));
+/** True if the user picked "No wallet needed". */
 const noWallet = (a: Ans) => has(a, "wallets", "No wallet needed");
 
 const QS: Q[] = [
@@ -78,6 +83,7 @@ const PKG: Record<string, [string, string]> = {
 
 const KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+/** Typeform-style form: one question per screen, branching via each question's `show()`, emails answers via FormSubmit. */
 export function BuildForm() {
   const [a, setA] = useState<Ans>({});
   const [i, setI] = useState(-1); // -1 = welcome
@@ -96,6 +102,7 @@ export function BuildForm() {
     return () => clearTimeout(t);
   }, [i]);
 
+  /** Validates the current question; returns an error message or "". */
   const valid = useCallback((qq: Q) => {
     const v = a[qq.id];
     const empty = v === undefined || (Array.isArray(v) ? v.length === 0 : String(v).trim() === "");
@@ -104,6 +111,7 @@ export function BuildForm() {
     return "";
   }, [a]);
 
+  /** Builds a label → answer payload and posts it to FormSubmit (emails BUILD_FORM_EMAIL). */
   const submit = useCallback(async () => {
     setState("sending");
     const data: Record<string, string> = {
@@ -134,6 +142,7 @@ export function BuildForm() {
     }
   }, [a, pkg]);
 
+  /** Advances to the next visible question (validating first); past the last one triggers submit. */
   const next = useCallback(() => {
     if (i < 0) { setDir(1); setI(0); return; }
     if (!q) return;
@@ -145,9 +154,12 @@ export function BuildForm() {
     setI(i + 1);
   }, [i, q, valid, visible.length]);
 
+  /** Goes back one question. */
   const back = () => { setErr(""); setDir(-1); setI(Math.max(-1, i - 1)); };
 
+  /** Stores an answer and clears any error. */
   const set = (id: string, v: string | string[]) => { setErr(""); setA((p) => ({ ...p, [id]: v })); };
+  /** Handles an option click: toggles multi-select, or saves single choice and auto-advances. */
   const pick = (qq: Q, opt: string) => {
     if (qq.type === "multi") {
       const cur = (a[qq.id] as string[]) || [];
@@ -163,6 +175,7 @@ export function BuildForm() {
 
   // keyboard: Enter = next, letter = choose
   useEffect(() => {
+    /** Keyboard shortcuts: Enter = OK, letter keys pick options. */
     const onKey = (e: KeyboardEvent) => {
       if (state === "sending") return;
       const t = e.target as HTMLElement;

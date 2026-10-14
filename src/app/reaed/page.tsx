@@ -1,16 +1,17 @@
+// /reaed — reAED (Dirham-pegged stablecoin) page: hero, overview, reAED FAQ, contact.
 import type { Metadata } from "next";
-import { JsonLd } from "@/components/site/JsonLd";
+import { JsonLd } from "@/components/common/JsonLd";
 import { breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/sections/Hero";
-import { Reaed } from "@/components/sections/Reaed";
-import { FAQ } from "@/components/sections/FAQ";
-import { reaedFaq } from "@/lib/faq";
-import { Contact } from "@/components/sections/Contact";
-import { Effects } from "@/components/site/Effects";
-import { IconSprite } from "@/components/site/ui";
+import { ReaedHero } from "@/components/sections/reaed/ReaedHero";
+import { Reaed } from "@/components/sections/reaed/Reaed";
+import { FAQ } from "@/components/sections/shared/FAQ";
+import { reaedFaq } from "@/content/faq";
+import { Contact } from "@/components/sections/shared/Contact";
+import { Effects } from "@/components/common/Effects";
+import { IconSprite } from "@/components/common/ui";
 
 export const metadata: Metadata = {
   title: "reAED \u2014 Dirham-Pegged Stablecoin (AED) on INFRA",
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
   openGraph: { title: "reAED \u2014 Dirham-Pegged Stablecoin (AED) on INFRA", description: "reAED is a fully collateralised stablecoin pegged 1:1 to the UAE Dirham (AED) with a fixed 10 AED transaction fee \u2014 built for payments, B2B settlement and tokenization in the UAE and MENA.", url: "/reaed", images: ["/opengraph-image"] },
 };
 
+/** reAED page composition. */
 export default function ReaedPage() {
   return (
     <>
@@ -28,7 +30,7 @@ export default function ReaedPage() {
       <Effects />
       <Navigation />
       <main id="top">
-        <Hero />
+        <ReaedHero />
         <Reaed />
         <FAQ items={reaedFaq} />
         <Contact />

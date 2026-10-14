@@ -1,10 +1,11 @@
+// /build — "Build with INFRA" configurator (multi-step lead form, see components/build/BuildForm).
 import type { Metadata } from "next";
-import { JsonLd } from "@/components/site/JsonLd";
+import { JsonLd } from "@/components/common/JsonLd";
 import { SITE_URL, abs, breadcrumbJsonLd } from "@/lib/seo";
 
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
-import { IconSprite } from "@/components/site/ui";
+import { IconSprite } from "@/components/common/ui";
 import { BuildForm } from "@/components/build/BuildForm";
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
   openGraph: { title: "Launch Your Own Stablecoin or White-label Wallet", description: "Configure your stablecoin network on INFRA in 4 minutes: currency peg, fee logic, pool distribution, validators, Android / iOS / extension wallets, bridge and more. For banks, fintechs, governments and enterprises worldwide.", url: "/build", images: ["/opengraph-image"] },
 };
 
+/** Build page: renders the configurator form without the site-wide Build CTA. */
 export default function BuildPage() {
   return (
     <>

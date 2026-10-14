@@ -1,0 +1,44 @@
+/* responsive */
+@media (max-width: 1080px) {
+  .links, .nav .btn { display: none }
+  .menu-btn { display: inline-flex }
+  .bento { grid-template-columns: repeat(6, minmax(0, 1fr)) }
+  .c3, .c4 { grid-column: span 3 }
+  .c5, .c6, .c7, .c8, .c12 { grid-column: span 6 }
+  .r2 { grid-row: auto }
+  .hero-grid { grid-template-columns: minmax(0, 1fr) }
+  .stage { height: 400px; margin: 0 16px 10px }
+  .hstats { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .hstats > div:nth-child(2) { border-right: 0 }
+  .hstats > div:nth-child(-n+2) { border-bottom: 1px solid var(--line) }
+  .nets { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+}
+@media (max-width: 680px) {
+  :root { --gap: 8px; --r: 14px }
+  .bento { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .c3, .c4, .c5, .c6, .c7, .c8, .c12 { grid-column: span 2 }
+  .half { grid-column: span 1 }
+  .hstats { grid-template-columns: minmax(0, 1fr) }
+  .hstats > div { border-right: 0 !important; border-bottom: 1px solid var(--line) }
+  .hstats > div:last-child { border-bottom: 0 }
+  .stage { height: 330px; margin: 0 8px 8px }
+  .fc { min-width: 0; padding: 9px 11px }
+  .fc b { font-size: .84rem }
+  .fc3 { display: none }
+  .steps { grid-template-columns: minmax(0, 1fr) }
+  .step, .step + .step { padding: 18px 0; border-left: 0; border-top: 1px solid var(--line) }
+  .chk, .big3 { grid-template-columns: minmax(0, 1fr) }
+  .big3 div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--wl) }
+  .chk li:nth-child(odd) { padding-right: 0 }
+  .flow { grid-template-columns: minmax(0, 1fr) }
+  .wr { width: 1px; height: 22px; justify-self: center }
+  .wr::after { left: -1px; width: 3px; height: 10px; animation-name: wrv }
+  .lrow { grid-template-columns: 60px minmax(0, 1fr) 92px; font-size: .72rem }
+  .lrow .ty, .lrow .s { display: none }
+  .half .stt b { font-size: 1.5rem }
+  .nets { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+}
+@keyframes wrv { from { top: -10px } to { top: 100% } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important }
+}

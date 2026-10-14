@@ -1,9 +1,11 @@
+// Generated social preview image for X/Twitter cards (same design as opengraph-image).
 import { ImageResponse } from "next/og";
 
 export const alt = "INFRA — Launch a pegged stablecoin network";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+/** Renders the social card with next/og (JSX → PNG at build time). */
 export default function OG() {
   const tickers = ["reAED · LIVE", "reUSD", "reEUR", "reGBP", "reINR", "reSAR", "+ yours"];
   return new ImageResponse(

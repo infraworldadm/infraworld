@@ -1,0 +1,35 @@
+/* INFRA design system: black, white, blue.
+   Layout: institutional bento. White tiles with hairlines on a cool white field;
+   black tiles for live systems; blue reserved for emphasis. */
+:root {
+  --field: #F3F5F9;
+  --white: #FFFFFF;
+  --black: #0A0B0E;
+  --t1: #0A0B0E;
+  --t2: rgba(10, 11, 14, .64);
+  --t3: rgba(10, 11, 14, .42);
+  --line: rgba(10, 11, 14, .09);
+  --line-2: rgba(10, 11, 14, .16);
+  --blue: #1F5BFF;
+  --blue-d: #0E3FD6;
+  --blue-soft: #EAF0FF;
+  --blue-l: #7EA0FF;
+  --w2: rgba(255, 255, 255, .64);
+  --w3: rgba(255, 255, 255, .4);
+  --wl: rgba(255, 255, 255, .1);
+  --f: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --m: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --r: 16px;
+  --gap: 12px;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+
+  /* Tailwind theme tokens (mapped in @theme inline, app/globals.css) */
+  --background: #ffffff;
+  --foreground: #0A0B0E;
+  --muted: #F3F5F9;
+  --muted-foreground: rgba(10, 11, 14, .64);
+  --border: rgba(10, 11, 14, .12);
+  --primary: #1F5BFF;
+  --primary-foreground: #ffffff;
+  color-scheme: light;
+}

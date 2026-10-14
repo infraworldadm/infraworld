@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Btn, Ic } from "@/components/site/ui";
-import { BUILD_FORM_URL } from "@/lib/links";
-import { ThemeToggle } from "@/components/site/ThemeToggle";
+import { Btn, Ic } from "@/components/common/ui";
+import { BUILD_FORM_URL } from "@/config/links";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 // "local": pages that contain that section, so the link anchors in-page there.
 const navigation = [
@@ -21,12 +21,14 @@ const SECTION_PAGES = ["/", "/reaed", "/wallet"];
 
 type LenisLike = { stop: () => void; start: () => void } | undefined;
 
+/** Fixed header with links, Get Wallet, theme toggle, Build CTA and the mobile drawer. */
 export function Navigation() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+  /** Uses an in-page anchor when the section exists on the current page, else links to the home page. */
   const hrefFor = (item: (typeof navigation)[number]) =>
     "local" in item && item.local?.includes(pathname) ? item.href.slice(1) : item.href;
   const [active, setActive] = useState(isHome ? "overview" : pathname);
@@ -34,6 +36,7 @@ export function Navigation() {
   useEffect(() => {
     let last = window.scrollY;
     const prog = document.getElementById("prog");
+    /** Scroll handler: progress bar, hide-on-scroll-down, and active-section highlighting. */
     const onScroll = () => {
       const y = window.scrollY;
       const h = document.documentElement.scrollHeight - window.innerHeight;

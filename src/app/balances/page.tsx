@@ -1,12 +1,15 @@
 "use client";
 
+// /balances — live reAED balances of the fee pools; polls /api/infra/balances every 30s.
+
 import { useCallback, useEffect, useState } from "react";
 import { SubPage } from "@/components/layout/SubPage";
-import { Lbl } from "@/components/site/ui";
-import { POOLS } from "@/lib/pools";
+import { Lbl } from "@/components/common/ui";
+import { POOLS } from "@/config/pools";
 
 type Payload = { pools: Record<string, string>; feeManager: string; updatedAt: string };
 
+/** Formats a wei string as reAED with up to 4 decimals (BigInt-safe). */
 function fmt(wei?: string): string {
   if (!wei) return "--";
   const v = BigInt(wei);
@@ -17,11 +20,13 @@ function fmt(wei?: string): string {
   return n.toLocaleString(undefined, { maximumFractionDigits: 4 });
 }
 
+/** Live pool balances page. */
 export default function BalancesPage() {
   const [data, setData] = useState<Payload | null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  /** Loads balances from the API; keeps last good values if a refresh fails. */
   const load = useCallback(async () => {
     setLoading(true);
     try {
@@ -44,6 +49,7 @@ export default function BalancesPage() {
   }, [load]);
 
   const total = data ? POOLS.reduce((s, p) => s + BigInt(data.pools[p.key] || "0"), BigInt(0)).toString() : undefined;
+  /** Display helper: "…" while first loading, "Unavailable" on error, else formatted value. */
   const show = (v?: string) => (loading && !data ? "…" : error && !data ? "Unavailable" : fmt(v));
 
   return (

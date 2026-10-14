@@ -1,3 +1,4 @@
+// SEO metadata for /balances (the page itself is a client component).
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   openGraph: { title: "reAED Fee Pool Balances (Live)", description: "Live on-chain reAED balances of the six INFRA fee-distribution pools: Validators, Cashback, Dividend, Tank, Team and Reserve.", url: "/balances", images: ["/opengraph-image"] },
 };
 
+/** Pass-through layout; exists only to attach the metadata above. */
 export default function BalancesLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }

@@ -1,0 +1,51 @@
+/* ---- Wallet page ---- */
+.w-hero { padding: clamp(24px, 4vw, 56px); overflow: hidden; background: radial-gradient(120% 90% at 85% 40%, rgba(31, 91, 255, .12), transparent 60%), var(--white) }
+.w-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: center }
+.w-copy { display: grid; gap: 20px; justify-items: start }
+.w-badge { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; padding: 6px 14px 6px 6px; border: 1px solid var(--line-2); border-radius: 99px; background: #fff }
+.w-badge img { border-radius: 50% }
+.w-hero h1 { font-size: clamp(2.2rem, 4.4vw, 4rem); letter-spacing: -.05em; line-height: 1 }
+.w-hero h1 .bl { color: var(--blue) }
+.w-hero .sub { color: var(--t2); max-width: 520px; font-size: 1.05rem }
+.w-note { font-size: .82rem; color: var(--t3) }
+.stores { display: flex; flex-wrap: wrap; gap: 10px }
+.store { display: inline-flex; align-items: center; gap: 12px; height: 56px; padding: 0 18px 0 14px; border-radius: 12px; background: var(--black); color: #fff; transition: transform .3s var(--ease), background .3s }
+.store:hover { transform: translateY(-2px); background: var(--blue) }
+.store small { display: block; font-size: .66rem; opacity: .7; line-height: 1.2 }
+.store b { display: block; font-size: 1rem; font-weight: 600; line-height: 1.2 }
+.store-i svg { width: 24px; height: 24px; display: block }
+.store.soon { background: rgba(10, 11, 14, .08); color: var(--t2); cursor: default; pointer-events: none }
+.dark .store, .blue .store { background: #fff; color: var(--t1) }
+.dark .store.soon, .blue .store.soon { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .75) }
+.w-stage { position: relative; height: clamp(460px, 46vw, 600px); display: grid; place-items: center }
+.w-ring { position: absolute; width: 78%; aspect-ratio: 1; border-radius: 50%; border: 1px dashed rgba(31, 91, 255, .3); animation: gspin 50s linear infinite }
+.w-ring::after { content: ""; position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 6px rgba(31, 91, 255, .15) }
+.p-main { position: relative; z-index: 2; animation: wfloat 6s ease-in-out infinite }
+.p-side { position: absolute; z-index: 1; right: 2%; top: 14%; transform: rotate(8deg) scale(.82); opacity: .9; animation: wfloat2 7s ease-in-out infinite }
+.w-chip { position: absolute; z-index: 3; display: inline-flex; gap: 8px; align-items: center; padding: 10px 14px; border-radius: 12px; background: #fff; border: 1px solid var(--line); box-shadow: 0 20px 40px -18px rgba(10, 11, 14, .25); font-size: .82rem; white-space: nowrap; animation: wchip 7s ease-in-out infinite }
+.w-chip b { color: #0E9F6E }
+.w-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: #0E9F6E; box-shadow: 0 0 0 4px rgba(14, 159, 110, .15) }
+.w-chip.c1 { left: 0; top: 18% }
+.w-chip.c2 { left: 4%; bottom: 16%; animation-delay: -2.3s }
+.w-chip.c3 { right: 0; bottom: 8%; animation-delay: -4.6s }
+@keyframes wfloat { 50% { transform: translateY(-12px) } }
+@keyframes wfloat2 { 50% { transform: rotate(8deg) scale(.82) translateY(10px) } }
+@keyframes wchip { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+.w-h3 { font-size: clamp(1.3rem, 2.2vw, 1.8rem); font-weight: 600; letter-spacing: -.03em; line-height: 1.15 }
+.w-plat { gap: 16px }
+.w-steps { margin: 4px 0 0; padding-left: 20px; display: grid; gap: 6px; font-size: .92rem; opacity: .85 }
+.w-chips { display: flex; flex-wrap: wrap; gap: 8px }
+.w-chips span { font-family: var(--m); font-size: .72rem; padding: 6px 10px; border-radius: 99px; border: 1px solid var(--line-2); color: var(--t2); animation: wglow 3.2s ease-in-out infinite }
+@keyframes wglow { 0%, 70%, 100% { border-color: var(--line-2); color: var(--t2) } 35% { border-color: var(--blue); color: var(--blue) } }
+.w-gallery { display: flex; gap: 18px; overflow-x: auto; padding: 8px 4px 20px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch }
+.w-gallery figure { margin: 0; flex: none; scroll-snap-align: center; display: grid; gap: 10px; justify-items: center }
+.w-gallery figcaption { font-family: var(--m); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--t3) }
+.w-road { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 8px }
+.w-road div { display: grid; gap: 6px; padding-top: 14px; border-top: 2px solid var(--line) }
+.w-road div:first-child { border-color: var(--blue) }
+.w-road small { font-family: var(--m); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--blue) }
+.w-road span { font-size: .88rem; color: var(--t2) }
+.w-safe { flex-direction: row; display: block; font-size: .92rem; color: var(--t2); background: var(--field); border: 1px dashed var(--line-2) }
+.w-safe a { color: var(--blue); text-decoration: underline }
+@media (max-width: 1080px) { .w-hero-grid { grid-template-columns: minmax(0, 1fr) } .w-stage { height: 560px } }
+@media (max-width: 680px) { .w-road { grid-template-columns: minmax(0, 1fr) } .w-stage { height: 520px } .p-side { display: none } .w-chip { font-size: .74rem; padding: 8px 10px } .w-chip.c3 { display: none } }

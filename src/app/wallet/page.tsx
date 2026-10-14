@@ -1,15 +1,16 @@
+// /wallet — INFRA Wallet download page (extension + Android). Store links: config/wallet.ts.
 import type { Metadata } from "next";
-import { JsonLd } from "@/components/site/JsonLd";
+import { JsonLd } from "@/components/common/JsonLd";
 import { SITE_URL, abs, breadcrumbJsonLd } from "@/lib/seo";
 
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
-import { Contact } from "@/components/sections/Contact";
-import { Effects } from "@/components/site/Effects";
-import { Btn, IconSprite, Lbl } from "@/components/site/ui";
+import { Contact } from "@/components/sections/shared/Contact";
+import { Effects } from "@/components/common/Effects";
+import { Btn, IconSprite, Lbl } from "@/components/common/ui";
 import { Phone } from "@/components/wallet/Phone";
-import { WALLET_LINKS } from "@/lib/wallet";
-import { BUILD_FORM_URL } from "@/lib/links";
+import { WALLET_LINKS } from "@/config/wallet";
+import { BUILD_FORM_URL } from "@/config/links";
 
 export const metadata: Metadata = {
   title: "INFRA Wallet \u2014 Multi-chain Self-custodial Crypto Wallet (Extension & Android)",
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 
 const LOGO = "/wallet/infra-wallet-logo.png";
 
+/** Store/download button. Renders a disabled "Coming soon" state when href is empty. */
 function StoreBtn({ href, kind, sub, title }: { href: string; kind: "chrome" | "android" | "ios" | "apk"; sub: string; title: string }) {
   const icon = {
     chrome: <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.6" /><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M12 8h9M8.5 14l-4.5 7.5M15.5 14 11 21.8" stroke="currentColor" strokeWidth="1.6" fill="none" /></svg>,
@@ -51,6 +53,7 @@ const steps = {
   android: ["Open the official Google Play link above", "Tap “Install” and open INFRA Wallet", "Create or import a wallet and set a passcode", "Enable biometrics and back up your recovery phrase"],
 };
 
+/** Wallet download page composition. */
 export default function WalletPage() {
   return (
     <>
