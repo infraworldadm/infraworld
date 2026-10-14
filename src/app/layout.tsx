@@ -46,7 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem("infra-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var d=document.documentElement;try{if(localStorage.getItem("infra-theme")==="dark")d.dataset.theme="dark"}catch(e){}if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(location.pathname==="/"||location.pathname==="/reaed")){d.classList.add("intro");setTimeout(function(){d.classList.remove("intro")},2500)}})()` }} />
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
         <JsonLd data={[orgJsonLd, siteJsonLd]} />

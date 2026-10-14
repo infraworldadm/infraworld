@@ -11,13 +11,24 @@ const subscribe = (cb: () => void) => {
 /** Light / dark switch. Light is the default; the choice is remembered per browser. */
 export function ThemeToggle() {
   const dark = useSyncExternalStore(subscribe, () => document.documentElement.dataset.theme === "dark", () => false);
-  const toggle = () => {
+  const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     const next = !dark;
     const root = document.documentElement;
-    root.classList.add("theme-anim");
-    root.dataset.theme = next ? "dark" : "light";
-    try { localStorage.setItem("infra-theme", next ? "dark" : "light"); } catch {}
-    window.setTimeout(() => root.classList.remove("theme-anim"), 500);
+    const apply = () => {
+      root.dataset.theme = next ? "dark" : "light";
+      try { localStorage.setItem("infra-theme", next ? "dark" : "light"); } catch {}
+    };
+    const vt = (document as Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } }).startViewTransition;
+    if (!vt || window.matchMedia("(prefers-reduced-motion: reduce)").matches) { apply(); return; }
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    vt.call(document, apply).ready.then(() => {
+      root.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${R}px at ${x}px ${y}px)`] },
+        { duration: 700, easing: "cubic-bezier(.65,0,.35,1)", pseudoElement: "::view-transition-new(root)" },
+      );
+    });
   };
   return (
     <button className="theme-tg" onClick={toggle} aria-label={dark ? "Switch to light mode" : "Switch to dark mode"} title={dark ? "Light mode" : "Dark mode"}>

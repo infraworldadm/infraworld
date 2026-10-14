@@ -122,6 +122,8 @@ export function Effects() {
     });
 
     /* ---- GSAP choreography ---- */
+    // Un-hide the hero in the same task GSAP sets each tween's start state, so nothing flashes.
+    document.documentElement.classList.remove("intro");
     const ctx = gsap.context(() => {
       if (RM) return;
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
@@ -238,22 +240,32 @@ export function Effects() {
       cleanups.push(() => window.removeEventListener("scroll", dir));
     }
 
-    /* ---- canvases ---- */
-    const terrain = $<HTMLCanvasElement>("#terrain");
-    if (terrain) cleanups.push(dotField(terrain, { cols: MOBILE ? 44 : 84, rows: MOBILE ? 16 : 24, packets: MOBILE ? 6 : 12, horizon: 0.5, cx: 0.5, width: 1.35, dark: false }, RM));
-    const cgrid = $<HTMLCanvasElement>("#cgrid");
-    if (cgrid) cleanups.push(dotField(cgrid, { cols: MOBILE ? 32 : 56, rows: MOBILE ? 14 : 22, packets: MOBILE ? 4 : 8, horizon: 0.35, cx: 0.7, width: 1.1, dark: true }, RM));
-    const glb = $<HTMLCanvasElement>("#globe");
-    if (glb) cleanups.push(globe(glb, RM));
-    const chain = $<HTMLCanvasElement>("#chain");
-    if (chain) {
-      const blk = $("#fcBlk"), txc = $("#fcTx");
-      cleanups.push(settlementChain(chain, RM, (h, tx) => {
-        if (blk) blk.textContent = `#${h.toLocaleString("en-US")}`;
-        if (txc) txc.textContent = String(tx);
-        if (!RM) gsap.fromTo([".fc1", ".fc2"], { scale: 0.94 }, { scale: 1, duration: 0.8, ease: "elastic.out(1,.5)", stagger: 0.08 });
-      }));
-    }
+    /* ---- canvases (deferred so the intro animation gets the first frames) ---- */
+    let canvasTimer = 0;
+    const startCanvases = () => {
+      const terrain = $<HTMLCanvasElement>("#terrain");
+      if (terrain) cleanups.push(dotField(terrain, { cols: MOBILE ? 44 : 84, rows: MOBILE ? 16 : 24, packets: MOBILE ? 6 : 12, horizon: 0.5, cx: 0.5, width: 1.35, dark: false }, RM));
+      const cgrid = $<HTMLCanvasElement>("#cgrid");
+      if (cgrid) cleanups.push(dotField(cgrid, { cols: MOBILE ? 32 : 56, rows: MOBILE ? 14 : 22, packets: MOBILE ? 4 : 8, horizon: 0.35, cx: 0.7, width: 1.1, dark: true }, RM));
+      const glb = $<HTMLCanvasElement>("#globe");
+      if (glb) cleanups.push(globe(glb, RM));
+      const chain = $<HTMLCanvasElement>("#chain");
+      if (chain) {
+        const blk = $("#fcBlk"), txc = $("#fcTx");
+        cleanups.push(settlementChain(chain, RM, (h, tx) => {
+          if (blk) blk.textContent = `#${h.toLocaleString("en-US")}`;
+          if (txc) txc.textContent = String(tx);
+          if (!RM) gsap.fromTo([".fc1", ".fc2"], { scale: 0.94 }, { scale: 1, duration: 0.8, ease: "elastic.out(1,.5)", stagger: 0.08 });
+        }));
+      }
+    };
+    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+    if (ric) canvasTimer = ric(startCanvases, { timeout: 450 });
+    else canvasTimer = window.setTimeout(startCanvases, 120);
+    cleanups.push(() => {
+      const cic = (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+      if (ric && cic) cic(canvasTimer); else clearTimeout(canvasTimer);
+    });
 
     return () => {
       intervals.forEach(clearInterval);

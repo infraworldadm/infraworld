@@ -866,5 +866,10 @@ html[data-theme="dark"] .t-hero h1, html[data-theme="dark"] .w-hero h1 { color: 
 .theme-tg .moon { transform: translateY(140%) rotate(-40deg); opacity: 0 }
 html[data-theme="dark"] .theme-tg .sun { transform: translateY(-140%) rotate(90deg); opacity: 0 }
 html[data-theme="dark"] .theme-tg .moon { transform: none; opacity: 1 }
-html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after { transition: background-color .45s ease, border-color .45s ease, color .45s ease, fill .45s ease, stroke .45s ease !important }
+/* theme switch: circular reveal via the View Transitions API */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal }
+::view-transition-old(root) { z-index: 1 }
+::view-transition-new(root) { z-index: 2 }
+/* first paint: hide hero intro targets until GSAP sets their start state (class added in <head>, removed by Effects) */
+html.intro .t-hero, html.intro .t-hero .hi, html.intro #h1 .ln > span, html.intro .hstats > div, html.intro .fc { opacity: 0 }
 @media (max-width: 1080px) { .nav .wrap > .theme-tg { margin-left: 8px } }
