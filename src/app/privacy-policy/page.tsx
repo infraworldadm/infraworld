@@ -4,8 +4,10 @@ import { Lbl } from "@/components/site/ui";
 import { LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | INFRA",
-  description: `How ${LEGAL.entity} handles information in the ${LEGAL.product} app, browser extension and infraworld.org.`,
+  title: "Privacy Policy",
+  description: "How INFRA handles information in the INFRA Wallet app, browser extension and infraworld.org.",
+  alternates: { canonical: "/privacy-policy" },
+  openGraph: { title: "Privacy Policy", description: "How INFRA handles information in the INFRA Wallet app, browser extension and infraworld.org.", url: "/privacy-policy", images: ["/opengraph-image"] },
 };
 
 const { entity: E, product: P, email: M, site: S } = LEGAL;

@@ -4,8 +4,10 @@ import { Lbl } from "@/components/site/ui";
 import { LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | INFRA",
-  description: `Terms governing use of the ${LEGAL.product} app, browser extension, INFRA network and infraworld.org.`,
+  title: "Terms & Conditions",
+  description: "Terms governing use of the INFRA Wallet app, browser extension, the INFRA network and infraworld.org.",
+  alternates: { canonical: "/terms" },
+  openGraph: { title: "Terms & Conditions", description: "Terms governing use of the INFRA Wallet app, browser extension, the INFRA network and infraworld.org.", url: "/terms", images: ["/opengraph-image"] },
 };
 
 const { entity: E, product: P, email: M, site: S } = LEGAL;

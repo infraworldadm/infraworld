@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/site/JsonLd";
+import { SITE_URL, abs, breadcrumbJsonLd } from "@/lib/seo";
+
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Contact } from "@/components/sections/Contact";
@@ -9,9 +12,11 @@ import { WALLET_LINKS } from "@/lib/wallet";
 import { BUILD_FORM_URL } from "@/lib/links";
 
 export const metadata: Metadata = {
-  title: "Download INFRA Wallet | Browser Extension & Android",
-  description:
-    "INFRA Wallet is a self-custodial multi-chain wallet for INFRA, Ethereum, BNB Chain and TRON. Hold reAED, swap and bridge assets. Download the browser extension or the Android app.",
+  title: "INFRA Wallet \u2014 Multi-chain Self-custodial Crypto Wallet (Extension & Android)",
+  description: "Download INFRA Wallet: a self-custodial multi-chain wallet for INFRA, Ethereum, BNB Chain and TRON. Hold reAED, swap and bridge \u2014 browser extension and Android app. White-label ready.",
+  keywords: ["INFRA Wallet", "multi-chain wallet", "self-custodial wallet", "white label crypto wallet", "reAED wallet", "crypto wallet Android", "Chrome wallet extension"],
+  alternates: { canonical: "/wallet" },
+  openGraph: { title: "INFRA Wallet \u2014 Multi-chain Self-custodial Crypto Wallet (Extension & Android)", description: "Download INFRA Wallet: a self-custodial multi-chain wallet for INFRA, Ethereum, BNB Chain and TRON. Hold reAED, swap and bridge \u2014 browser extension and Android app. White-label ready.", url: "/wallet", images: ["/opengraph-image"] },
 };
 
 const LOGO = "/wallet/infra-wallet-logo.png";
@@ -50,6 +55,18 @@ export default function WalletPage() {
   return (
     <>
       <IconSprite />
+      <JsonLd data={[{
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "INFRA Wallet",
+        applicationCategory: "FinanceApplication",
+        operatingSystem: "Android, Chrome, Brave, Edge",
+        description: "Self-custodial multi-chain wallet for INFRA, Ethereum, BNB Chain and TRON with in-wallet swaps and cross-chain bridge.",
+        url: abs("/wallet"),
+        image: abs("/wallet/infra-wallet-logo.png"),
+        publisher: { "@id": `${SITE_URL}/#org` },
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      }, breadcrumbJsonLd("INFRA Wallet", "/wallet")]} />
       <Effects />
       <Navigation />
       <main id="top">
