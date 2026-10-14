@@ -709,3 +709,6 @@ footer.site { padding-block: 34px calc(26px + env(safe-area-inset-bottom, 0px)) 
 .drawer-wallet { white-space: nowrap; font-size: 1.15rem !important }
 .drawer-wallet img { width: 30px; height: 30px }
 @media (prefers-reduced-motion: reduce) { .nav-wallet::after, .nw-ic::before { display: none } }
+#globe { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y }
+#stage:has(#globe) .fc1 { top: 4%; left: 0 }
+#stage:has(#globe) .fc2 { bottom: 6%; right: 0 }

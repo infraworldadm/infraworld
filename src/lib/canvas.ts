@@ -226,3 +226,172 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     host.removeEventListener("pointermove", onMove); host.removeEventListener("pointerleave", onLeave);
   };
 }
+
+/** INFRA Global: dotted globe with settlement arcs from the Dubai hub to each currency network. */
+export function globe(cv: HTMLCanvasElement, reduced: boolean): () => void {
+  const x = cv.getContext("2d");
+  if (!x) return () => {};
+  const coarse = window.matchMedia("(pointer:coarse)").matches;
+  const D = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
+  let W = 0, H = 0, run = true, alive = true, raf = 0, lastW = -1, lastH = -1;
+  let px = 0, py = 0, tpx = 0, tpy = 0;
+  const size = () => {
+    const b = cv.getBoundingClientRect();
+    if (b.width === lastW && b.height === lastH) return;
+    lastW = b.width; lastH = b.height; W = b.width; H = b.height;
+    cv.width = W * D; cv.height = H * D;
+  };
+  size();
+  const ro = new ResizeObserver(() => { size(); if (reduced) frame(performance.now()); });
+  ro.observe(cv);
+  const io = new IntersectionObserver(([e]) => { run = e.isIntersecting; if (run && reduced) frame(performance.now()); });
+  io.observe(cv);
+  const host = cv.parentElement!;
+  const onMove = (e: PointerEvent) => { const b = cv.getBoundingClientRect(); tpx = (e.clientX - b.left) / W - 0.5; tpy = (e.clientY - b.top) / H - 0.5; };
+  const onLeave = () => { tpx = tpy = 0; };
+  host.addEventListener("pointermove", onMove);
+  host.addEventListener("pointerleave", onLeave);
+
+  const cs = getComputedStyle(document.body);
+  const FS = cs.getPropertyValue("--font-geist-sans").trim() || "system-ui, sans-serif";
+  const FM = cs.getPropertyValue("--font-geist-mono").trim() || "ui-monospace, monospace";
+  const RAD = Math.PI / 180;
+  // Simplified continent outlines (lon, lat) — enough to read as a world map in dot form.
+  const LAND: number[][][] = [
+    [[-168,65],[-140,70],[-95,72],[-80,63],[-60,55],[-55,47],[-70,43],[-76,35],[-81,25],[-97,26],[-97,18],[-87,15],[-79,8],[-92,15],[-105,20],[-117,32],[-124,40],[-125,49],[-135,58],[-150,60],[-165,60]],
+    [[-50,60],[-20,70],[-20,82],[-60,82],[-73,76]],
+    [[-79,8],[-60,10],[-50,0],[-35,-7],[-40,-22],[-48,-28],[-58,-38],[-65,-55],[-72,-50],[-71,-30],[-80,-5]],
+    [[-10,36],[-9,43],[-2,48],[-5,58],[5,62],[15,69],[28,71],[40,67],[45,55],[40,45],[28,41],[23,37],[12,38],[5,43],[-5,36]],
+    [[-6,50],[2,51],[-2,58],[-6,57]],
+    [[-17,15],[-17,21],[-8,35],[10,37],[32,31],[35,28],[43,12],[51,12],[40,-15],[35,-25],[20,-35],[15,-25],[10,-5],[8,4],[-8,5]],
+    [[28,41],[40,45],[45,55],[40,67],[60,70],[80,73],[110,77],[140,72],[170,68],[180,65],[160,55],[140,52],[130,42],[122,30],[120,22],[108,20],[105,10],[100,3],[98,15],[90,22],[80,8],[73,20],[62,25],[57,25],[52,27],[48,30],[35,35]],
+    [[35,28],[39,22],[43,13],[52,16],[59,22],[56,26],[51,26],[48,30],[36,33]],
+    [[114,-22],[122,-18],[131,-12],[142,-11],[146,-18],[153,-26],[150,-37],[140,-38],[130,-32],[115,-35]],
+    [[95,5],[105,-6],[120,-9],[140,-8],[130,-2],[118,5],[108,2]],
+    [[130,31],[141,36],[142,45],[139,40]],
+  ];
+  const inPoly = (lon: number, lat: number, poly: number[][]) => {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, yi] = poly[i], [xj, yj] = poly[j];
+      if ((yi > lat) !== (yj > lat) && lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) c = !c;
+    }
+    return c;
+  };
+  const N = coarse ? 1800 : 3200;
+  const dots: { v: readonly [number, number, number]; land: boolean }[] = [];
+  for (let i = 0; i < N; i++) {
+    const y = 1 - (2 * (i + 0.5)) / N, r = Math.sqrt(1 - y * y), th = Math.PI * (3 - Math.sqrt(5)) * i;
+    const v = [Math.cos(th) * r, y, Math.sin(th) * r] as const;
+    const lat = Math.asin(v[1]) / RAD, lon = Math.atan2(v[0], v[2]) / RAD;
+    const land = LAND.some((pl) => inPoly(lon, lat, pl));
+    if (land || i % 4 === 0) dots.push({ v, land });
+  }
+  const v3 = (lat: number, lon: number) => [Math.cos(lat * RAD) * Math.sin(lon * RAD), Math.sin(lat * RAD), Math.cos(lat * RAD) * Math.cos(lon * RAD)] as const;
+  const hub = { v: v3(25.2, 55.3) };
+  const nodes = [
+    { sym: "reUSD", city: "New York", v: v3(40.7, -74), live: false, left: true },
+    { sym: "reEUR", city: "Frankfurt", v: v3(50.1, 8.7), live: false, left: false },
+    { sym: "reGBP", city: "London", v: v3(51.5, -0.1), live: false, left: true },
+  ];
+  const slerp = (a: readonly number[], b: readonly number[], t: number) => {
+    const d = Math.acos(Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]));
+    const s = Math.sin(d) || 1, k1 = Math.sin((1 - t) * d) / s, k2 = Math.sin(t * d) / s;
+    return [a[0] * k1 + b[0] * k2, a[1] * k1 + b[1] * k2, a[2] * k1 + b[2] * k2];
+  };
+  let t = 0, last = performance.now();
+  const frame = (now: number) => {
+    if (!alive) return;
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (run && W > 0) {
+      if (!reduced) t += dt;
+      px += (tpx - px) * 0.05; py += (tpy - py) * 0.05;
+      const rot = (-30 + Math.sin(t * 0.12) * 40 + px * 25) * RAD, tilt = (36 + py * 10) * RAD;
+      const cr = Math.cos(rot), sr = Math.sin(rot), ct = Math.cos(tilt), st = Math.sin(tilt);
+      const R = Math.min(W, H) * 0.42, cx = W * 0.5, cy = H * 0.52;
+      const P = (v: readonly number[], lift = 1) => {
+        const X = v[0] * cr + v[2] * sr, Z0 = -v[0] * sr + v[2] * cr;
+        const Y = v[1] * ct - Z0 * st, Z = v[1] * st + Z0 * ct;
+        return [cx + X * R * lift, cy - Y * R * lift, Z] as const;
+      };
+      x.setTransform(D, 0, 0, D, 0, 0);
+      x.clearRect(0, 0, W, H);
+      // atmosphere
+      const g = x.createRadialGradient(cx, cy, R * 0.6, cx, cy, R * 1.35);
+      g.addColorStop(0, "rgba(31,91,255,.10)"); g.addColorStop(0.75, "rgba(31,91,255,.06)"); g.addColorStop(1, "rgba(31,91,255,0)");
+      x.fillStyle = g; x.beginPath(); x.arc(cx, cy, R * 1.35, 0, 7); x.fill();
+      const body = x.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.1, cx, cy, R);
+      body.addColorStop(0, "#ffffff"); body.addColorStop(1, "#E9EEF9");
+      x.fillStyle = body; x.beginPath(); x.arc(cx, cy, R, 0, 7); x.fill();
+      x.strokeStyle = "rgba(31,91,255,.22)"; x.lineWidth = 1; x.stroke();
+      // dots
+      for (const d of dots) {
+        const p = P(d.v);
+        if (p[2] <= 0) continue;
+        if (d.land) {
+          x.fillStyle = `rgba(10,11,14,${0.18 + p[2] * 0.6})`;
+          const s = 1 + p[2] * 1.4;
+          x.fillRect(p[0] - s / 2, p[1] - s / 2, s, s);
+        } else {
+          x.fillStyle = `rgba(31,91,255,${0.08 + p[2] * 0.14})`;
+          x.fillRect(p[0] - 0.6, p[1] - 0.6, 1.2, 1.2);
+        }
+      }
+      // arcs
+      const hp = P(hub.v);
+      nodes.forEach((n, i) => {
+        const SEG = 48;
+        x.beginPath();
+        let started = false;
+        for (let k = 0; k <= SEG; k++) {
+          const u = k / SEG, q = P(slerp(hub.v, n.v, u), 1 + Math.sin(Math.PI * u) * 0.22);
+          if (q[2] < -0.15) { started = false; continue; }
+          if (!started) { x.moveTo(q[0], q[1]); started = true; } else x.lineTo(q[0], q[1]);
+        }
+        x.strokeStyle = n.live ? "rgba(31,91,255,.75)" : "rgba(31,91,255,.35)";
+        x.lineWidth = n.live ? 1.8 : 1.2;
+        x.setLineDash(n.live ? [] : [4, 4]); x.stroke(); x.setLineDash([]);
+        // packets
+        for (let k = 0; k < 2; k++) {
+          const u = ((t * (n.live ? 0.45 : 0.3) + i * 0.27 + k * 0.5) % 1);
+          const q = P(slerp(hub.v, n.v, u), 1 + Math.sin(Math.PI * u) * 0.22);
+          if (q[2] < -0.15) continue;
+          x.fillStyle = "#1F5BFF"; x.beginPath(); x.arc(q[0], q[1], 2.6, 0, 7); x.fill();
+          x.fillStyle = "rgba(31,91,255,.18)"; x.beginPath(); x.arc(q[0], q[1], 6, 0, 7); x.fill();
+        }
+      });
+      // markers + labels
+      const label = (p: readonly number[], sym: string, city: string, live: boolean, big = false, left = false, below = false) => {
+        if (p[2] < 0.05) return;
+        const pulse = (t * 0.8) % 1;
+        if (live) { x.strokeStyle = `rgba(31,91,255,${0.6 * (1 - pulse)})`; x.lineWidth = 1.5; x.beginPath(); x.arc(p[0], p[1], 5 + pulse * (big ? 22 : 14), 0, 7); x.stroke(); }
+        x.fillStyle = live ? "#1F5BFF" : "#0A0B0E"; x.beginPath(); x.arc(p[0], p[1], big ? 5 : 3.5, 0, 7); x.fill();
+        x.fillStyle = "#fff"; x.beginPath(); x.arc(p[0], p[1], big ? 2 : 1.4, 0, 7); x.fill();
+        x.font = `600 ${big ? 13 : 12}px ${FS}`;
+        const w1 = x.measureText(sym).width;
+        x.font = `500 9.5px ${FM}`;
+        const w2 = x.measureText(city.toUpperCase()).width;
+        const bw = Math.max(w1, w2) + 20, bh = 36;
+        const bx = Math.max(4, Math.min(W - bw - 4, left ? p[0] - bw - 10 : p[0] + 10)), by = below ? Math.min(H - bh - 4, p[1] + 12) : Math.max(4, p[1] - bh - 8);
+        x.globalAlpha = Math.min(1, p[2] * 3);
+        x.fillStyle = live ? "#1F5BFF" : "rgba(255,255,255,.95)";
+        x.strokeStyle = live ? "#1F5BFF" : "rgba(10,11,14,.1)";
+        x.beginPath();
+        const r = 9;
+        x.moveTo(bx + r, by); x.arcTo(bx + bw, by, bx + bw, by + bh, r); x.arcTo(bx + bw, by + bh, bx, by + bh, r); x.arcTo(bx, by + bh, bx, by, r); x.arcTo(bx, by, bx + bw, by, r);
+        x.closePath(); x.fill(); x.stroke();
+        x.fillStyle = live ? "#fff" : "#0A0B0E"; x.font = `600 ${big ? 13 : 12}px ${FS}`; x.fillText(sym, bx + 10, by + 16);
+        x.fillStyle = live ? "rgba(255,255,255,.75)" : "rgba(10,11,14,.5)"; x.font = `500 9.5px ${FM}`; x.fillText(city.toUpperCase(), bx + 10, by + 29);
+        x.globalAlpha = 1;
+      };
+      nodes.forEach((n) => label(P(n.v), n.sym, n.city, false, false, n.left));
+      label(hp, "reAED · Live", "Dubai · INFRA hub", true, true, hp[0] > cx + R * 0.35, true);
+    }
+    if (!reduced) raf = requestAnimationFrame(frame);
+  };
+  raf = requestAnimationFrame(frame);
+  return () => {
+    alive = false; cancelAnimationFrame(raf); io.disconnect(); ro.disconnect();
+    host.removeEventListener("pointermove", onMove); host.removeEventListener("pointerleave", onLeave);
+  };
+}

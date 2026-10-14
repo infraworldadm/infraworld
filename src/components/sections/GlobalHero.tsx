@@ -1,55 +1,5 @@
 import { Btn, Ic, Lbl } from "@/components/site/ui";
 
-const nodes = [
-  { sym: "reAED", cur: "UAE Dirham", x: 90, y: 90, live: true },
-  { sym: "reUSD", cur: "US Dollar", x: 430, y: 90 },
-  { sym: "reEUR", cur: "Euro", x: 90, y: 370 },
-  { sym: "reGBP", cur: "British Pound", x: 430, y: 370 },
-];
-const C = { x: 260, y: 230 };
-
-/** Network-of-networks visual: one INFRA core, a pegged stablecoin network per currency. Pure SVG + CSS (light on mobile). */
-function NetworkStage() {
-  return (
-    <svg viewBox="0 0 520 460" className="gstage" role="img" aria-label="INFRA core connecting pegged stablecoin networks: reAED, reUSD, reEUR and reGBP">
-      <defs>
-        <radialGradient id="gglow" cx="50%" cy="50%" r="50%">
-          <stop offset="0" stopColor="#1F5BFF" stopOpacity=".22" />
-          <stop offset="1" stopColor="#1F5BFF" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      <circle cx={C.x} cy={C.y} r="200" fill="url(#gglow)" />
-      <circle cx={C.x} cy={C.y} r="150" className="g-orbit" />
-      <circle cx={C.x} cy={C.y} r="105" className="g-orbit g-orbit2" />
-      {nodes.map((n, i) => (
-        <g key={n.sym}>
-          <path id={`gl${i}`} d={`M${C.x} ${C.y} L${n.x} ${n.y}`} className={`g-link${n.live ? " live" : ""}`} />
-          {[0, 1, 2].map((k) => (
-            <circle key={k} r={n.live ? 4 : 3} className={`g-pk${n.live ? " live" : ""}`}>
-              <animateMotion dur={n.live ? "2.4s" : "4.2s"} begin={`${k * (n.live ? 0.8 : 1.4)}s`} repeatCount="indefinite" keyPoints={i % 2 ? "0;1" : "1;0"} keyTimes="0;1" calcMode="linear">
-                <mpath href={`#gl${i}`} />
-              </animateMotion>
-            </circle>
-          ))}
-        </g>
-      ))}
-      {nodes.map((n) => (
-        <g key={n.sym + "n"} transform={`translate(${n.x} ${n.y})`} className={`g-node${n.live ? " live" : ""}`}>
-          {n.live && <circle r="46" className="g-ping" />}
-          <rect x="-58" y="-30" width="116" height="60" rx="14" />
-          <text y="-3" textAnchor="middle" className="g-sym">{n.sym}</text>
-          <text y="16" textAnchor="middle" className="g-cur">{n.live ? "Live · " : ""}{n.cur}</text>
-        </g>
-      ))}
-      <g transform={`translate(${C.x} ${C.y})`} className="g-core">
-        <rect x="-62" y="-62" width="124" height="124" rx="26" className="g-core-b" transform="rotate(45)" />
-        <text y="-2" textAnchor="middle" className="g-core-t">INFRA</text>
-        <text y="18" textAnchor="middle" className="g-core-s">Layer 1 · EVM</text>
-      </g>
-    </svg>
-  );
-}
-
 export function GlobalHero() {
   return (
     <section className="wrap hero" id="overview">
@@ -80,8 +30,20 @@ export function GlobalHero() {
                 <Btn href="/reaed" label="Explore reAED" variant="o" />
               </div>
             </div>
-            <div className="stage" id="stage" data-cursor="Networks">
-              <NetworkStage />
+            <div className="stage" id="stage" data-cursor="Global">
+              <canvas id="globe" role="img" aria-label="Globe showing settlement arcs from the INFRA hub in Dubai (reAED, live) to reUSD, reEUR and reGBP networks" />
+              <div className="fc fc1">
+                <span className="lbl">Networks</span>
+                <b className="tn">1 live · 3 ready</b>
+                <small>reAED · reUSD · reEUR · reGBP</small>
+              </div>
+              <div className="fc fc2">
+                <span className="okb"><Ic n="check" /></span>
+                <div style={{ display: "grid", gap: 2 }}>
+                  <b>Same stack, any peg</b>
+                  <small>fixed fee per network</small>
+                </div>
+              </div>
             </div>
           </div>
           <div className="hstats">

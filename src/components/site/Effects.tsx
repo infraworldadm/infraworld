@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import { dotField, settlementChain } from "@/lib/canvas";
+import { dotField, globe, settlementChain } from "@/lib/canvas";
 
 const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s);
 const $$ = <T extends Element = HTMLElement>(s: string) => Array.from(document.querySelectorAll<T>(s));
@@ -243,6 +243,8 @@ export function Effects() {
     if (terrain) cleanups.push(dotField(terrain, { cols: MOBILE ? 44 : 84, rows: MOBILE ? 16 : 24, packets: MOBILE ? 6 : 12, horizon: 0.5, cx: 0.5, width: 1.35, dark: false }, RM));
     const cgrid = $<HTMLCanvasElement>("#cgrid");
     if (cgrid) cleanups.push(dotField(cgrid, { cols: MOBILE ? 32 : 56, rows: MOBILE ? 14 : 22, packets: MOBILE ? 4 : 8, horizon: 0.35, cx: 0.7, width: 1.1, dark: true }, RM));
+    const glb = $<HTMLCanvasElement>("#globe");
+    if (glb) cleanups.push(globe(glb, RM));
     const chain = $<HTMLCanvasElement>("#chain");
     if (chain) {
       const blk = $("#fcBlk"), txc = $("#fcTx");
