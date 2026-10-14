@@ -1,6 +1,13 @@
 /* eslint-disable @next/next/no-html-link-for-pages -- full page loads so home-page effects and hash scrolling initialise */
+import { BuildCta } from "@/components/site/BuildCta";
+import { FloatingBuild } from "@/components/site/FloatingBuild";
+import { BUILD_FORM_URL } from "@/lib/links";
+
 export function Footer() {
   return (
+    <>
+    <BuildCta />
+    <FloatingBuild />
     <footer className="site wrap">
       <div className="foot">
         <a href="/" className="brand" aria-label="INFRA home">
@@ -21,9 +28,11 @@ export function Footer() {
         <nav aria-label="Legal">
           <a href="/privacy-policy">Privacy Policy</a>
           <a href="/terms">Terms &amp; Conditions</a>
+          <a href={BUILD_FORM_URL} target="_blank" rel="noopener noreferrer">Build / White label</a>
         </nav>
         <span>© {new Date().getFullYear()} INFRA. All rights reserved.</span>
       </div>
     </footer>
+    </>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Btn, Ic } from "@/components/site/ui";
+import { BUILD_FORM_URL } from "@/lib/links";
 
 // "local": pages that contain that section, so the link anchors in-page there.
 const navigation = [
@@ -84,7 +85,7 @@ export function Navigation() {
             <span className="nw-tx"><span className="nw-get">Get </span><b>Wallet</b></span>
             <svg className="nw-dl" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14" /></svg>
           </a>
-          <Btn href={SECTION_PAGES.includes(pathname) ? "#contact" : "/#contact"} label="Request a pilot" mag={false} />
+          <Btn href={BUILD_FORM_URL} external label="Build with INFRA" mag={false} />
           <button
             className="menu-btn"
             onClick={() => setOpen(!open)}

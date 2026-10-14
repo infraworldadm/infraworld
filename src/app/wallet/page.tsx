@@ -6,6 +6,7 @@ import { Effects } from "@/components/site/Effects";
 import { Btn, IconSprite, Lbl } from "@/components/site/ui";
 import { Phone } from "@/components/wallet/Phone";
 import { WALLET_LINKS } from "@/lib/wallet";
+import { BUILD_FORM_URL } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "Download INFRA Wallet | Browser Extension & Android",
@@ -168,7 +169,7 @@ export default function WalletPage() {
               <Lbl>White label</Lbl>
               <h3 className="w-h3">Launch your own branded wallet.</h3>
               <p>INFRA Wallet is white-label ready: your brand, your networks and your pegged stablecoin, on a production-tested self-custodial wallet.</p>
-              <Btn href="#contact" label="Talk to us about white label" variant="w" className="push" />
+              <Btn href={BUILD_FORM_URL} external label="Build your white-label wallet" variant="w" className="push" />
             </div>
             <div className="tile c12 rv w-safe">
               <b>Stay safe:</b> INFRA will never ask for your recovery phrase or private key. Only download INFRA Wallet from the

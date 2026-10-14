@@ -1,5 +1,6 @@
 import { Btn, Ic, Lbl } from "@/components/site/ui";
 import { Calculator } from "@/components/site/Calculator";
+import { BUILD_FORM_URL } from "@/lib/links";
 
 const networks = [
   { sym: "reAED", cur: "AED", name: "UAE Dirham", status: "First network · INFRA project", main: true, href: "/reaed" },
@@ -57,7 +58,7 @@ export function Infra() {
               <Lbl blue>Stablecoin networks</Lbl>
               <h2 className="st2">One infrastructure. A pegged stablecoin for each currency.</h2>
             </div>
-            <Btn href="#contact" label="Launch a currency network" variant="k" />
+            <Btn href={BUILD_FORM_URL} external label="Launch a currency network" variant="k" />
           </div>
           <p style={{ maxWidth: "70ch" }}>
             INFRA is not limited to one currency. It provides pegged stablecoin network infrastructure: each network uses a stablecoin

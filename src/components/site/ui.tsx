@@ -39,6 +39,7 @@ export function Btn({
   mag = true,
   className = "",
   style,
+  external = false,
 }: {
   href: string;
   label: string;
@@ -47,9 +48,10 @@ export function Btn({
   mag?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  external?: boolean;
 }) {
   return (
-    <a className={`btn btn-${variant}${mag ? " mag" : ""} ${className}`} href={href} style={style}>
+    <a className={`btn btn-${variant}${mag ? " mag" : ""} ${className}`} href={href} style={style} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
       <span className="tx"><span>{label}</span><span aria-hidden="true">{label}</span></span>
       {arrow && <Ic n="arrow" />}
     </a>
