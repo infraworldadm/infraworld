@@ -28,3 +28,20 @@
 #stage:has(#globe) .fc1 { display: none }
 @media (max-width: 680px) { #stage:has(#globe) .fc2 { display: none } }
 #stage:has(#globe) .fc2 { top: 3%; bottom: auto; right: 0 }
+
+/* ---- Header: reAED "Live" highlight ---- */
+.links a.nav-live { display: inline-flex; align-items: center; gap: 7px; color: var(--t1); font-weight: 600 }
+.live-badge { display: inline-flex; align-items: center; gap: 5px; height: 20px; padding: 0 8px 0 6px; border-radius: 99px; background: rgba(14, 159, 110, .12); color: #0E9F6E; font-family: var(--m); font-size: .62rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; line-height: 1 }
+.live-badge i { position: relative; width: 6px; height: 6px; border-radius: 50%; background: #10B981 }
+.live-badge i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #10B981; animation: livepulse 1.6s ease-out infinite }
+@keyframes livepulse { from { transform: scale(1); opacity: .7 } to { transform: scale(3); opacity: 0 } }
+.live-badge.lg { height: 26px; font-size: .72rem; margin-left: 12px; vertical-align: middle; letter-spacing: .08em }
+html[data-theme="dark"] .live-badge { background: rgba(16, 185, 129, .16); color: #34D399 }
+@media (prefers-reduced-motion: reduce) { .live-badge i::after { display: none } }
+.links a.nav-live { margin-inline: 4px; padding: 6px 6px 6px 14px; border-radius: 99px; background: var(--blue-soft); color: var(--blue); box-shadow: inset 0 0 0 1px rgba(31, 91, 255, .22); transition: background .3s, box-shadow .3s }
+.links a.nav-live:hover, .links a.nav-live.on { background: var(--blue); color: #fff; box-shadow: none }
+.links a.nav-live:hover .live-badge, .links a.nav-live.on .live-badge { background: rgba(255, 255, 255, .2); color: #fff }
+.links a.nav-live:hover .live-badge i, .links a.nav-live.on .live-badge i, .links a.nav-live:hover .live-badge i::after, .links a.nav-live.on .live-badge i::after { background: #fff }
+.links a.nav-live::after { display: none }
+html[data-theme="dark"] .links a.nav-live { color: #7EA0FF; box-shadow: inset 0 0 0 1px rgba(126, 160, 255, .3) }
+html[data-theme="dark"] .links a.nav-live:hover, html[data-theme="dark"] .links a.nav-live.on { color: #fff }

@@ -10,7 +10,7 @@ import { ThemeToggle } from "@/components/common/ThemeToggle";
 const navigation = [
   { name: "Overview", href: "/#overview" },
   { name: "Networks", href: "/#networks" },
-  { name: "reAED", href: "/reaed" },
+  { name: "reAED", href: "/reaed", live: true },
   { name: "Technology", href: "/technology" },
   { name: "Enterprise", href: "/enterprise" },
   { name: "FAQ", href: "/#faq", local: ["/", "/reaed", "/technology"] },
@@ -76,8 +76,9 @@ export function Navigation() {
           </a>
           <nav className="links" aria-label="Primary">
             {navigation.map((item) => (
-              <a key={item.name} href={hrefFor(item)} className={active === item.href.slice(2) || active === item.href ? "on" : ""}>
+              <a key={item.name} href={hrefFor(item)} className={`${active === item.href.slice(2) || active === item.href ? "on" : ""}${"live" in item ? " nav-live" : ""}`}>
                 {item.name}
+                {"live" in item && <span className="live-badge" aria-label="network is live"><i />Live</span>}
               </a>
             ))}
           </nav>
@@ -105,7 +106,7 @@ export function Navigation() {
       <div className={`drawer${open ? " open" : ""}`} id="drawer" aria-hidden={!open}>
         {navigation.map((item, i) => (
           <a key={item.name} href={hrefFor(item)} onClick={() => setOpen(false)}>
-            {item.name}
+            <span>{item.name}{"live" in item && <span className="live-badge lg"><i />Live</span>}</span>
             <small>{String(i + 1).padStart(2, "0")}</small>
           </a>
         ))}
