@@ -11,7 +11,7 @@ const STEPS = [
 /** Numbered steps with an animated connector; ends with the Build CTA. */
 export function HowItWorks() {
   return (
-    <section className="wrap sec" id="how">
+    <section className="wrap blk" id="how">
       <div className="tile rv how">
         <div className="row" style={{ alignItems: "flex-end" }}>
           <div style={{ display: "grid", gap: 10 }}>

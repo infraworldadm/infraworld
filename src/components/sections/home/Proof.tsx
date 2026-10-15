@@ -29,7 +29,7 @@ export function Proof() {
   }, []);
 
   return (
-    <section className="wrap" id="live">
+    <section className="wrap blk" id="live">
       <div className="bento">
         <div className="tile c6 dark rv proof-live">
           <span className="live"><i />Live on INFRA</span>

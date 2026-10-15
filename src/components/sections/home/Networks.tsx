@@ -12,7 +12,7 @@ const networks = [
 /** Currency network cards. reAED links to its page; others open the Build form. */
 export function Networks() {
   return (
-      <section className="wrap" id="networks" style={{ paddingTop: "var(--gap)" }}>
+      <section className="wrap blk" id="networks">
         <div className="tile rv">
           <div className="row" style={{ alignItems: "flex-end" }}>
             <div style={{ display: "grid", gap: 12, maxWidth: 720 }}>

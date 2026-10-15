@@ -12,7 +12,7 @@ const applications = [
 /** Use-case cards. */
 export function UseCases() {
   return (
-      <section className="wrap sec" id="use-cases">
+      <section className="wrap blk" id="use-cases">
         <div className="bento">
           <div className="tile c12 rv" style={{ gap: 8 }}>
             <Lbl blue>Use cases</Lbl>

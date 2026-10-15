@@ -304,3 +304,7 @@ footer.site { padding-block: 34px calc(26px + env(safe-area-inset-bottom, 0px)) 
 .c2 { grid-column: span 2 }
 @media (max-width: 1080px) { .c2 { grid-column: span 2 } }
 @media (max-width: 680px) { .c2 { grid-column: span 2 } }
+
+/* home rhythm: consistent spacing between stacked sections (replaces the large .sec padding on home) */
+.blk { padding-top: clamp(16px, 2.2vw, 28px) }
+.blk + .sec { padding-top: clamp(32px, 4vw, 56px) }

@@ -4,7 +4,7 @@ import { Lbl } from "@/components/common/ui";
 /** "Why INFRA" — four short tiles with small animated visuals. */
 export function Pillars() {
   return (
-      <section className="wrap" id="why" style={{ paddingTop: "var(--gap)" }}>
+      <section className="wrap blk" id="why">
         <div className="bento">
           <div className="tile c3 rv">
             <Lbl>Why INFRA</Lbl>
