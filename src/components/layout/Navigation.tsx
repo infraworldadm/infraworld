@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Btn, Ic } from "@/components/common/ui";
 import { BUILD_FORM_URL } from "@/config/links";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { DirhamIcon } from "@/components/common/DirhamIcon";
 
 // "local": pages that contain that section, so the link anchors in-page there.
 const navigation = [
@@ -78,10 +79,7 @@ export function Navigation() {
             {navigation.map((item) => (
               <a key={item.name} href={hrefFor(item)} className={`${active === item.href.slice(2) || active === item.href ? "on" : ""}${"live" in item ? " nav-live" : ""}`}>
                 {"live" in item && (
-                  <span className="nav-coin" aria-hidden="true">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/wallet/infra-wallet-logo.png" alt="" width={20} height={20} />
-                  </span>
+                  <span className="nav-coin" aria-hidden="true"><DirhamIcon /></span>
                 )}
                 {item.name}
                 {"live" in item && <span className="live-badge" aria-label="network is live"><i />Live</span>}
@@ -114,10 +112,7 @@ export function Navigation() {
           <a key={item.name} href={hrefFor(item)} onClick={() => setOpen(false)}>
             <span>
               {"live" in item && (
-                <span className="nav-coin lg" aria-hidden="true">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/wallet/infra-wallet-logo.png" alt="" width={34} height={34} />
-                </span>
+                <span className="nav-coin lg" aria-hidden="true"><DirhamIcon /></span>
               )}
               {item.name}
               {"live" in item && <span className="live-badge lg"><i />Live</span>}
