@@ -77,6 +77,12 @@ export function Navigation() {
           <nav className="links" aria-label="Primary">
             {navigation.map((item) => (
               <a key={item.name} href={hrefFor(item)} className={`${active === item.href.slice(2) || active === item.href ? "on" : ""}${"live" in item ? " nav-live" : ""}`}>
+                {"live" in item && (
+                  <span className="nav-coin" aria-hidden="true">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/wallet/infra-wallet-logo.png" alt="" width={20} height={20} />
+                  </span>
+                )}
                 {item.name}
                 {"live" in item && <span className="live-badge" aria-label="network is live"><i />Live</span>}
               </a>
@@ -106,7 +112,16 @@ export function Navigation() {
       <div className={`drawer${open ? " open" : ""}`} id="drawer" aria-hidden={!open}>
         {navigation.map((item, i) => (
           <a key={item.name} href={hrefFor(item)} onClick={() => setOpen(false)}>
-            <span>{item.name}{"live" in item && <span className="live-badge lg"><i />Live</span>}</span>
+            <span>
+              {"live" in item && (
+                <span className="nav-coin lg" aria-hidden="true">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/wallet/infra-wallet-logo.png" alt="" width={34} height={34} />
+                </span>
+              )}
+              {item.name}
+              {"live" in item && <span className="live-badge lg"><i />Live</span>}
+            </span>
             <small>{String(i + 1).padStart(2, "0")}</small>
           </a>
         ))}
