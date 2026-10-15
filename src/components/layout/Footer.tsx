@@ -4,7 +4,7 @@ import { FloatingBuild } from "@/components/common/FloatingBuild";
 import { BUILD_FORM_URL } from "@/config/links";
 
 const COLS: { title: string; links: [string, string][] }[] = [
-  { title: "Platform", links: [["INFRA", "/#infra"], ["Networks", "/#networks"], ["reAED", "/reaed"], ["Technology", "/#technology"], ["FAQ", "/#faq"]] },
+  { title: "Platform", links: [["Networks", "/#networks"], ["reAED", "/reaed"], ["Technology", "/technology"], ["Enterprise", "/enterprise"], ["FAQ", "/#faq"]] },
   { title: "Products", links: [["INFRA Wallet", "/wallet"], ["Pool Balances", "/balances"], ["Build / White label", BUILD_FORM_URL]] },
   { title: "Company", links: [["Contact", "/#contact"], ["info@infraworld.com", "mailto:info@infraworld.com"]] },
   { title: "Legal", links: [["Privacy Policy", "/privacy-policy"], ["Terms & Conditions", "/terms"]] },

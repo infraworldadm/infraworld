@@ -29,3 +29,9 @@
 .legal .tbl { overflow-x: auto }
 .legal .toc { columns: 2; column-gap: 32px; margin-top: 18px }
 @media (max-width: 640px) { .legal .toc { columns: 1 } }
+
+/* intro header for content pages (/technology, /enterprise) */
+.subtop { padding-top: calc(76px + env(safe-area-inset-top, 0px)) }
+.page-intro { display: grid; gap: 14px; padding-block: clamp(28px, 5vw, 64px) clamp(20px, 3vw, 36px) }
+.page-intro h1 { font-size: clamp(2.2rem, 5vw, 4rem); letter-spacing: -.045em; line-height: 1 }
+.page-intro p { color: var(--t2); max-width: 620px; font-size: 1.05rem }

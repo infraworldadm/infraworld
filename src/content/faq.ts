@@ -66,3 +66,7 @@ globalFaq.push(
   ...globalRest,
 );
 
+
+/** Short FAQ for the home page (the full list stays on the technology page). */
+const HOME_Q = ["What is INFRA?", "Is INFRA only for reAED?", "Which currencies can INFRA support?", "Who is INFRA for?", "How do we start?"];
+export const homeFaq: FaqItem[] = HOME_Q.map((q) => globalFaq.find((f) => f.question === q)).filter((f): f is FaqItem => Boolean(f));

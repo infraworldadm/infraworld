@@ -11,13 +11,13 @@ const navigation = [
   { name: "Overview", href: "/#overview" },
   { name: "Networks", href: "/#networks" },
   { name: "reAED", href: "/reaed" },
-  { name: "Challenges", href: "/#challenges" },
-  { name: "Technology", href: "/#technology" },
-  { name: "FAQ", href: "/#faq", local: ["/", "/reaed"] },
+  { name: "Technology", href: "/technology" },
+  { name: "Enterprise", href: "/enterprise" },
+  { name: "FAQ", href: "/#faq", local: ["/", "/reaed", "/technology"] },
   { name: "Pools", href: "/balances" },
-  { name: "Contact", href: "/#contact", local: ["/", "/reaed", "/wallet"] },
+  { name: "Contact", href: "/#contact", local: ["/", "/reaed", "/wallet", "/technology", "/enterprise"] },
 ];
-const SECTION_PAGES = ["/", "/reaed", "/wallet"];
+const SECTION_PAGES = ["/", "/reaed", "/wallet", "/technology", "/enterprise"];
 
 type LenisLike = { stop: () => void; start: () => void } | undefined;
 

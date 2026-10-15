@@ -286,3 +286,21 @@ footer.site { padding-block: 34px calc(26px + env(safe-area-inset-bottom, 0px)) 
 .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center; font-size: .84rem; color: var(--t2) }
 .foot nav { display: flex; flex-wrap: wrap; gap: 6px 20px }
 .foot nav a:hover { color: var(--blue) }
+
+/* how it works (home) */
+.how { gap: 22px }
+.how-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); counter-reset: s }
+.how-steps li { position: relative; display: grid; gap: 6px; padding: 22px 20px; border-radius: 12px; border: 1px solid var(--line); background: var(--field) }
+.how-steps li b { font-size: 1.08rem; font-weight: 600; letter-spacing: -.01em }
+.how-steps li span:last-child { color: var(--t2); font-size: .94rem }
+.how-n { font-family: var(--m); font-size: .8rem; color: var(--blue) }
+.how-steps li:not(:last-child)::after { content: ""; position: absolute; top: 50%; right: calc(var(--gap) * -1); width: var(--gap); height: 2px; background: linear-gradient(90deg, var(--blue) 50%, transparent 0) 0 0 / 8px 2px; animation: howflow 1s linear infinite }
+@keyframes howflow { to { background-position: 8px 0 } }
+@media (max-width: 680px) { .how-steps { grid-template-columns: minmax(0, 1fr) } .how-steps li::after { display: none } }
+
+/* live proof (home) */
+.proof-live b { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 600; letter-spacing: -.04em; line-height: 1 }
+.proof-live b small { font-size: .4em; color: var(--w2); font-weight: 500 }
+.c2 { grid-column: span 2 }
+@media (max-width: 1080px) { .c2 { grid-column: span 2 } }
+@media (max-width: 680px) { .c2 { grid-column: span 2 } }

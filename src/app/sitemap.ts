@@ -9,6 +9,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/", 1, "weekly"],
     ["/reaed", 0.9, "weekly"],
     ["/build", 0.9, "monthly"],
+    ["/technology", 0.8, "monthly"],
+    ["/enterprise", 0.8, "monthly"],
     ["/wallet", 0.8, "monthly"],
     ["/balances", 0.6, "daily"],
     ["/privacy-policy", 0.3, "yearly"],

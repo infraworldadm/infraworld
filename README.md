@@ -23,7 +23,9 @@ Node 20+ recommended.
 
 | Route | What it is | Entry file |
 | --- | --- | --- |
-| `/` | INFRA Global home: globe hero, networks, applications, technology, FAQ, contact | `src/app/page.tsx` |
+| `/` | INFRA Global home (short, visual): globe hero, networks, why INFRA, use cases, how it works, live proof, FAQ | `src/app/page.tsx` |
+| `/technology` | How INFRA works: network profile, fixed fees vs gas, oversight, tech stack, validators, economics, full FAQ | `src/app/technology/page.tsx` |
+| `/enterprise` | Enterprise tokenization & custom stablecoins | `src/app/enterprise/page.tsx` |
 | `/reaed` | reAED (Dirham stablecoin): settlement-chain hero, overview, reAED FAQ | `src/app/reaed/page.tsx` |
 | `/wallet` | INFRA Wallet downloads (extension, Android), features, app screens, white label | `src/app/wallet/page.tsx` |
 | `/build` | "Build with INFRA" multi-step lead form (emails answers) | `src/app/build/page.tsx` |
@@ -52,7 +54,9 @@ src/
 │  │  ├─ FloatingBuild.tsx  Floating "Build with INFRA" pill
 │  │  └─ JsonLd.tsx         Structured-data <script> helper
 │  ├─ sections/
-│  │  ├─ home/              Sections of the home page (GlobalHero, Infra, Technology, …)
+│  │  ├─ home/              Home sections (GlobalHero, Networks, Pillars, UseCases, HowItWorks, Proof)
+│  │  ├─ technology/        /technology sections (WhatIsInfra, InfrastructureChallenges, RiskAlignment, Technology, EconomicModel)
+│  │  ├─ enterprise/        /enterprise sections (EnterpriseProgramStructure, TokenTypes)
 │  │  ├─ reaed/             Sections of the reAED page (ReaedHero, Reaed)
 │  │  └─ shared/            Used on several pages (FAQ, Contact)
 │  ├─ build/BuildForm.tsx   The /build questionnaire (questions, branching, submit)
