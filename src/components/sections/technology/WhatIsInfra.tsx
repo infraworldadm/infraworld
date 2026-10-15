@@ -26,7 +26,7 @@ export function WhatIsInfra() {
               <div><span>Consensus</span>Proof of Staked Authority</div>
               <div><span>Region</span>UAE &amp; MENA</div>
               <div><span>Unit of account</span>Pegged stablecoin</div>
-              <div><span>First network</span>reAED · 10 AED / tx</div>
+              <div><span>First network</span>reAED · fixed fee / tx</div>
             </div>
           </div>
         </div>

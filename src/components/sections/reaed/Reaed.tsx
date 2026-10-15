@@ -3,7 +3,7 @@ import { Lbl } from "@/components/common/ui";
 
 const props = [
   { tag: "1:1 Dirham Peg", title: "Stable Value", text: "Dirham-pegged settlement for consistent value and stable reporting." },
-  { tag: "10 AED Fee", title: "Fixed Transaction Costs", text: "Fixed transaction costs enable predictable operational expenses." },
+  { tag: "Fixed Fee", title: "Fixed Transaction Costs", text: "Fixed transaction costs enable predictable operational expenses." },
   { tag: "Fully Backed", title: "Collateralized Model", text: "Issuance follows controlled mint and burn processes tied to reserves, designed to be auditable." },
   { tag: "Enterprise Grade", title: "Institutional Ready", text: "Dirham-denominated for enterprise and regulated use.", blue: true },
 ];

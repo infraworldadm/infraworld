@@ -60,7 +60,7 @@ export function ReaedHero() {
                 <div className="fc fc1">
                   <span className="lbl">Block sealed</span>
                   <b className="tn" id="fcBlk">#1,284,512</b>
-                  <small><span id="fcTx">24</span> tx · 10 AED each</small>
+                  <small><span id="fcTx">24</span> tx · fixed fee each</small>
                 </div>
                 <div className="fc fc3">
                   <span className="lbl">Validator</span>
@@ -71,16 +71,16 @@ export function ReaedHero() {
                   <span className="okb"><Ic n="check" /></span>
                   <div style={{ display: "grid", gap: 2 }}>
                     <b>Settlement final</b>
-                    <small>fee 10.00 reAED</small>
+                    <small>fixed network fee</small>
                   </div>
                 </div>
               </div>
             </div>
             <div className="hstats">
               <div>
-                <span className="lbl">Network fee · reAED</span>
+                <span className="lbl">Current network fee · reAED</span>
                 <b className="tn"><Odo value="10" /><small>AED</small></b>
-                <span>Fixed network fee: every transaction costs 10 AED</span>
+                <span>Flat fee per transaction — currently 10 AED, adjustable by governance</span>
               </div>
               <div>
                 <span className="lbl">Unit of account</span>
@@ -117,7 +117,7 @@ export function ReaedHero() {
               Qualified validators, clear governance, and production infrastructure
             </h3>
             <div className="kv">
-              <div><span>Fee</span>10 AED fixed</div>
+              <div><span>Fee</span>Fixed · governance-set</div>
               <div><span>Peg</span>1 reAED = 1 AED</div>
               <div><span>Consensus</span>PoSA</div>
             </div>

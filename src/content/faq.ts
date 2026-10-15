@@ -26,7 +26,7 @@ export const reaedFaq: Item[] = [
   },
   {
     question: "What does a transaction cost?",
-    answer: "Every transaction pays a fixed 10 AED (10 reAED) network fee, enforced by the protocol.",
+    answer: "Each transaction pays one flat network fee set by INFRA governance — currently 10 AED (10 reAED) on reAED. Governance can adjust it at any time, and the current fee is always shown before you confirm.",
   },
   {
     question: "How do I get reAED?",

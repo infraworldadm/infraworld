@@ -58,7 +58,7 @@ export function GlobalHero() {
             <div>
               <span className="lbl">Fees</span>
               <b>Fixed</b>
-              <span>Flat, protocol-enforced fee per transaction — no gas auctions</span>
+              <span>Flat fee per transaction, set by governance — no gas auctions</span>
             </div>
             <div>
               <span className="lbl">Consensus</span>

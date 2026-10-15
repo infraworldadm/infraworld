@@ -129,7 +129,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     for (let i = 1; i < pts.length; i++) x.lineTo(pts[i][0], pts[i][1]);
     x.closePath(); x.fillStyle = fill; x.fill(); x.strokeStyle = stroke; x.lineWidth = 1; x.stroke();
   };
-  /** Draws one isometric block with its "#height · 10 AED" label. */
+  /** Draws one isometric block with its "#height · FIXED FEE" label. */
   const cube = (X: number, z: number, blue: boolean, a: number, label: number) => {
     x.globalAlpha = a;
     const dk = isDark();
@@ -151,7 +151,7 @@ export function settlementChain(cv: HTMLCanvasElement, reduced: boolean, onSeal:
     x.fillText("#" + String(label).slice(-4), 50, 46);
     x.fillStyle = blue ? "#fff" : "#1F5BFF";
     x.font = `600 19px ${FS}`;
-    x.fillText("10 AED", 50, 70);
+    x.fillText("FIXED FEE", 50, 70);
     x.restore();
     x.setTransform(D, 0, 0, D, 0, 0);
     x.globalAlpha = 1;

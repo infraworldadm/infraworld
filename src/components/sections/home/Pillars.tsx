@@ -15,8 +15,8 @@ export function Pillars() {
                 <circle className="vdot" r="4" fill="#1F5BFF" cy="58" cx="0" />
               </svg>
             </div>
-            <h3>10 AED per transaction</h3>
-            <p>Every transaction has a 10 AED fixed cost, independent of congestion and market conditions.</p>
+            <h3>Fixed fee per transaction</h3>
+            <p>One flat fee per transaction, set by network governance — not by congestion or gas auctions.</p>
           </div>
           <div className="tile c3 rv">
             <Lbl>Why INFRA</Lbl>

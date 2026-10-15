@@ -52,7 +52,7 @@ const QS: Q[] = [
   { id: "consensus", title: "Consensus", type: "single", options: ["Default PoSA (recommended)", "Custom — tell us more"], show: isChain },
   { id: "consensusDetail", title: "Describe the consensus you need", type: "long", show: (a) => isChain(a) && String(a.consensus || "").startsWith("Custom") },
   { id: "networkType", title: "Network type", type: "single", options: ["Public", "Permissioned (approved participants only)", "Testnet / pilot first"], show: isNet },
-  { id: "feeModel", title: "How should transaction fees work?", type: "single", options: ["Default — fixed fee per transaction (like 10 AED on reAED)", "Custom fixed fee", "Percentage of transaction value", "Tiered by volume", "Gasless — we sponsor users' fees"], show: isNet },
+  { id: "feeModel", title: "How should transaction fees work?", type: "single", options: ["Default — INFRA fixed fee per transaction (adjustable by governance)", "Custom fixed fee", "Percentage of transaction value", "Tiered by volume", "Gasless — we sponsor users' fees"], show: isNet },
   { id: "feeDetail", title: "Describe your fee: amount, percentage or tiers", type: "long", placeholder: "e.g. 2 units per tx, or 0.1% capped at 5", show: (a) => isNet(a) && /Custom|Percentage|Tiered/.test(String(a.feeModel || "")) },
   { id: "feeDist", title: "Where should collected fees go?", help: "Default six-pool split: Validators 10% · Cashback 30% · Dividend 30% · Tank 10% · Team 10% · Reserve 10%", type: "single", options: ["Default six-pool split", "Custom split", "Need advice"], show: isNet },
   { id: "feeDistDetail", title: "Your pools and percentages (must total 100%)", type: "long", placeholder: "Validators 20%, Treasury 50%, Rewards 30%", show: (a) => isNet(a) && a.feeDist === "Custom split" },

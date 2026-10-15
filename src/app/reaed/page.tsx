@@ -15,10 +15,10 @@ import { IconSprite } from "@/components/common/ui";
 
 export const metadata: Metadata = {
   title: "reAED \u2014 Dirham-Pegged Stablecoin (AED) on INFRA",
-  description: "reAED is a fully collateralised stablecoin pegged 1:1 to the UAE Dirham (AED) with a fixed 10 AED transaction fee \u2014 built for payments, B2B settlement and tokenization in the UAE and MENA.",
+  description: "reAED is a fully collateralised stablecoin pegged 1:1 to the UAE Dirham (AED) with a fixed, governance-set transaction fee \u2014 built for payments, B2B settlement and tokenization in the UAE and MENA.",
   keywords: ["reAED", "AED stablecoin", "Dirham stablecoin", "UAE stablecoin", "dirham-backed token", "UAE digital dirham payments"],
   alternates: { canonical: "/reaed" },
-  openGraph: { title: "reAED \u2014 Dirham-Pegged Stablecoin (AED) on INFRA", description: "reAED is a fully collateralised stablecoin pegged 1:1 to the UAE Dirham (AED) with a fixed 10 AED transaction fee \u2014 built for payments, B2B settlement and tokenization in the UAE and MENA.", url: "/reaed", images: ["/opengraph-image"] },
+  openGraph: { title: "reAED \u2014 Dirham-Pegged Stablecoin (AED) on INFRA", description: "reAED is a fully collateralised stablecoin pegged 1:1 to the UAE Dirham (AED) with a fixed, governance-set transaction fee \u2014 built for payments, B2B settlement and tokenization in the UAE and MENA.", url: "/reaed", images: ["/opengraph-image"] },
 };
 
 /** reAED page composition. */

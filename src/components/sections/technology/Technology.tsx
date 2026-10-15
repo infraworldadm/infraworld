@@ -4,7 +4,7 @@ import { Btn, Ic, Lbl } from "@/components/common/ui";
 const techFeatures = [
   { tag: "Runtime", title: "EVM Compatible", description: "Full compatibility with Ethereum tooling, wallets, and smart contracts for seamless development." },
   { tag: "Consensus", title: "PoSA Consensus", description: "Proof of Staked Authority model with qualified validators for reliable performance and governance." },
-  { tag: "Economics", title: "Fixed Transaction Fee", description: "Fixed 10 AED fee per transaction for predictable costs and stable settlement." },
+  { tag: "Economics", title: "Fixed Transaction Fee", description: "A flat fee per transaction — set and adjustable by network governance — for predictable costs." },
   { tag: "Validators", title: "Qualified Validator Set", description: "Vetted validators with clear governance and operational requirements." },
   { tag: "Operations", title: "Production Infrastructure", description: "Enterprise-grade deployment with monitoring, availability, and security." },
   { tag: "Finality", title: "Fast Confirmation", description: "Low-latency finality for time-sensitive settlement and user experience." },
@@ -13,7 +13,7 @@ const techFeatures = [
 const stats = [
   { l: "Speed", b: "Fast", p: "Fast transaction confirmation", c: "" },
   { l: "Economics", b: "Predictable", p: "Fixed fees and stable economics", c: "" },
-  { l: "Currency", b: "Dirham", p: "10 AED fixed fee per transaction", c: " blue" },
+  { l: "Currency", b: "Dirham", p: "Fixed fee per transaction, set by governance", c: " blue" },
   { l: "Grade", b: "Production", p: "Enterprise-grade infrastructure", c: " dark" },
 ];
 
