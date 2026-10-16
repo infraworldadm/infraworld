@@ -1,0 +1,46 @@
+/* ---- Stake & earn reAED (components/common/Staking.tsx) ---- */
+.stake-sec { padding-top: clamp(16px, 2.2vw, 28px) }
+.stake-info { gap: 16px; background-image: radial-gradient(110% 80% at 100% 0%, rgba(31, 91, 255, .35), transparent 60%) }
+.stake-src { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--wl); background: rgba(255, 255, 255, .04) }
+.stake-src > div { flex: 1; display: grid; gap: 2px }
+.stake-src small { font-family: var(--m); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--w3) }
+.stake-src b { font-size: 1.6rem; font-weight: 600; letter-spacing: -.03em }
+.stake-src em { font-style: normal; font-size: .55em; color: var(--w2) }
+.stake-coin { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 50%; background: #fff; color: var(--blue); box-shadow: 0 0 0 4px rgba(31, 91, 255, .25) }
+.stake-coin svg { width: 22px; height: 22px; animation: coinflip 4s cubic-bezier(.65, 0, .35, 1) infinite }
+.stake-coin.sm { width: 22px; height: 22px; box-shadow: none; border: 1px solid rgba(31, 91, 255, .25) }
+.stake-coin.sm svg { width: 12px; height: 12px; animation: none }
+.stake-steps { list-style: none; margin: auto 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; counter-reset: s }
+.stake-steps li { display: grid; gap: 3px; padding: 12px; border-radius: 10px; border: 1px solid var(--wl); counter-increment: s }
+.stake-steps li::before { content: "0" counter(s); font-family: var(--m); font-size: .68rem; color: var(--blue-l) }
+.stake-steps b { font-weight: 600 }
+.stake-steps span { font-size: .8rem; color: var(--w2) }
+
+.stake-card { gap: 16px }
+.stake-head { display: flex; justify-content: space-between; align-items: center }
+.stake-head b { font-size: 1.15rem; font-weight: 600 }
+.stake-soon { font-family: var(--m); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); background: var(--blue-soft); padding: 5px 10px; border-radius: 99px }
+.stake-in { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; min-width: 0 }
+.stake-in > span, .stake-lock > span { font-family: var(--m); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--t3) }
+.stake-field { display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 16px; border-radius: 12px; border: 1px solid var(--line-2); background: var(--field); transition: border-color .2s }
+.stake-field:focus-within { border-color: var(--blue) }
+.stake-in input { flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 1.8rem; font-weight: 600; letter-spacing: -.02em; color: var(--t1); outline: none }
+.stake-tok { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px 6px 6px; border-radius: 99px; background: var(--white); border: 1px solid var(--line); font-weight: 600; font-size: .9rem }
+.stake-quick { display: flex; gap: 6px }
+.stake-quick button { padding: 5px 10px; border-radius: 7px; border: 1px solid var(--line-2); font-family: var(--m); font-size: .74rem; color: var(--t2) }
+.stake-quick button:hover { border-color: var(--blue); color: var(--blue) }
+.stake-lock { display: grid; gap: 8px }
+.stake-lock > div { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px }
+.stake-lock button { padding: 10px 6px; border-radius: 10px; border: 1px solid var(--line-2); font-size: .86rem; color: var(--t2); transition: all .2s }
+.stake-lock button:hover { border-color: var(--blue) }
+.stake-lock button.on { background: var(--blue); border-color: var(--blue); color: #fff }
+.stake-sum { margin: 0; display: grid; border-top: 1px solid var(--line) }
+.stake-sum div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: .9rem }
+.stake-sum dt { color: var(--t2) }
+.stake-sum dd { margin: 0; font-weight: 500; text-align: right }
+.stake-btn { display: flex; justify-content: center; align-items: center; gap: 10px; height: 52px; border-radius: 12px; background: var(--blue); color: #fff; font-weight: 600; transition: background .25s, transform .25s var(--ease) }
+.stake-btn:hover { background: #1546D6; transform: translateY(-1px) }
+.stake-btn svg { width: 16px; height: 16px }
+.stake-fine { font-size: .76rem !important; color: var(--t3) !important }
+@media (max-width: 680px) { .stake-steps { grid-template-columns: minmax(0, 1fr) } .stake-lock > div { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+@media (prefers-reduced-motion: reduce) { .stake-coin svg { animation: none } }

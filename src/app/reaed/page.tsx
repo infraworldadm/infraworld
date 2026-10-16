@@ -9,6 +9,7 @@ import { ReaedHero } from "@/components/sections/reaed/ReaedHero";
 import { Reaed } from "@/components/sections/reaed/Reaed";
 import { FAQ } from "@/components/sections/shared/FAQ";
 import { reaedFaq } from "@/content/faq";
+import { Staking } from "@/components/common/Staking";
 import { Contact } from "@/components/sections/shared/Contact";
 import { Effects } from "@/components/common/Effects";
 import { IconSprite } from "@/components/common/ui";
@@ -32,6 +33,7 @@ export default function ReaedPage() {
       <main id="top">
         <ReaedHero />
         <Reaed />
+        <Staking />
         <FAQ items={reaedFaq} />
         <Contact />
       </main>

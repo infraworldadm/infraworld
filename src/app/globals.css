@@ -18,6 +18,7 @@
 @import "../styles/pages/build-form.css";
 @import "../styles/theme-dark.css";
 @import "../styles/components/footer.css";
+@import "../styles/components/staking.css";
 
 @theme inline {
   --color-background: var(--background);

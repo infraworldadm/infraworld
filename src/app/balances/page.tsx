@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { SubPage } from "@/components/layout/SubPage";
 import { Ic, Lbl } from "@/components/common/ui";
 import { POOLS } from "@/config/pools";
+import { Staking } from "@/components/common/Staking";
 
 type Payload = { pools: Record<string, string>; feeManager: string; updatedAt: string };
 const REFRESH_S = 30;
@@ -189,6 +190,8 @@ export default function BalancesPage() {
           );
         })}
       </div>
+
+      <div className="pb-stake"><Staking /></div>
 
       {/* How it works */}
       <div className="tile pb-flow">

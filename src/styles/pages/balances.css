@@ -57,3 +57,5 @@ html[data-theme="dark"] .pb-card.hl { box-shadow: 0 18px 40px -24px rgba(0, 0, 0
 
 @media (max-width: 1080px) { .pb-hero { grid-template-columns: minmax(0, 1fr) } .pb-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
 @media (max-width: 680px) { .pb-grid, .pb-flow ol { grid-template-columns: minmax(0, 1fr) } .pb-flow li:not(:last-child)::after { display: none } .pb-ctrl { width: 100% } .pb-ctrl .refresh { margin-left: auto } }
+.pb-stake .stake-sec { padding-inline: 0; padding-top: var(--gap) }
+.pb-stake .rv { opacity: 1 }
