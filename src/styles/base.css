@@ -78,7 +78,7 @@ svg.i { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-widt
 .btn-o:hover { border-color: var(--t1) }
 .btn-b { background: var(--blue); color: #fff }
 .btn-b::before { background: var(--black) }
-.btn-w { background: #fff; color: var(--t1) }
+.btn-w { background: #fff; color: #0A0B0E }
 .btn-w::before { background: var(--blue) }
 .btn-w:hover { color: #fff }
 .nav .btn { height: 40px; padding: 0 16px; font-size: .85rem }

@@ -8,6 +8,7 @@
 @import "../styles/sections/core.css";
 @import "../styles/responsive.css";
 @import "../styles/pages/subpages.css";
+@import "../styles/pages/balances.css";
 @import "../styles/mobile-performance.css";
 @import "../styles/sections/global-hero.css";
 @import "../styles/pages/wallet.css";

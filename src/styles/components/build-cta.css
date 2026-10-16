@@ -15,7 +15,7 @@
 .bc-body p { color: rgba(255, 255, 255, .72) }
 .bc-tag { display: inline-flex; align-items: center; gap: 8px; font-family: var(--m); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: #7EA0FF }
 .bc-tag i { width: 6px; height: 6px; border-radius: 50%; background: #7EA0FF; animation: pl 1.8s infinite }
-.bc-btn { position: relative; display: inline-flex; align-items: center; gap: 12px; height: 60px; padding: 0 28px; border-radius: 14px; background: #fff; color: var(--t1); font-weight: 600; font-size: 1.05rem; overflow: hidden; isolation: isolate; transition: transform .35s var(--ease), color .35s }
+.bc-btn { position: relative; display: inline-flex; align-items: center; gap: 12px; height: 60px; padding: 0 28px; border-radius: 14px; background: #fff; color: #0A0B0E; font-weight: 600; font-size: 1.05rem; overflow: hidden; isolation: isolate; transition: transform .35s var(--ease), color .35s }
 .bc-btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease) }
 .bc-btn:hover { color: #fff; transform: translateY(-2px) }
 .bc-btn:hover::before { transform: scaleX(1) }

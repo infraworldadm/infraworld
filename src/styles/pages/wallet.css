@@ -15,7 +15,7 @@
 .store b { display: block; font-size: 1rem; font-weight: 600; line-height: 1.2 }
 .store-i svg { width: 24px; height: 24px; display: block }
 .store.soon { background: rgba(10, 11, 14, .08); color: var(--t2); cursor: default; pointer-events: none }
-.dark .store, .blue .store { background: #fff; color: var(--t1) }
+.dark .store, .blue .store { background: #fff; color: #0A0B0E }
 .dark .store.soon, .blue .store.soon { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .75) }
 .w-stage { position: relative; height: clamp(460px, 46vw, 600px); display: grid; place-items: center }
 .w-ring { position: absolute; width: 78%; aspect-ratio: 1; border-radius: 50%; border: 1px dashed rgba(31, 91, 255, .3); animation: gspin 50s linear infinite }
