@@ -308,3 +308,15 @@ footer.site { padding-block: 34px calc(26px + env(safe-area-inset-bottom, 0px)) 
 /* home rhythm: consistent spacing between stacked sections (replaces the large .sec padding on home) */
 .blk { padding-top: clamp(16px, 2.2vw, 28px) }
 .blk + .sec { padding-top: clamp(32px, 4vw, 56px) }
+
+/* First screen fills the viewport on desktop (hero tile = viewport height minus header) */
+@media (min-width: 1081px) {
+  .t-hero, .w-hero { min-height: calc(100svh - 76px - env(safe-area-inset-top, 0px) - var(--gap)) }
+  .t-hero .hero-grid { flex: 1; align-items: center }
+  .w-hero { display: flex; flex-direction: column; justify-content: center }
+}
+/* Large screens: scale hero visuals up so wide monitors don't look empty */
+@media (min-width: 1600px) {
+  .stage { height: clamp(580px, 36vw, 760px) }
+  .t-hero h1 { font-size: clamp(4.1rem, 3.6vw, 5.4rem) }
+}
