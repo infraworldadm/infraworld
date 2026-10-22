@@ -320,3 +320,32 @@ footer.site { padding-block: 34px calc(26px + env(safe-area-inset-bottom, 0px)) 
   .stage { height: clamp(580px, 36vw, 760px) }
   .t-hero h1 { font-size: clamp(4.1rem, 3.6vw, 5.4rem) }
 }
+
+/* compact reAED overview (sections/reaed/Reaed.tsx) */
+.band.band-c { padding-block: clamp(28px, 4vw, 56px) clamp(16px, 2vw, 28px); margin-top: clamp(16px, 2.2vw, 28px) }
+.re-intro { gap: 14px }
+.re-intro > p { max-width: 62ch }
+.re-props { list-style: none; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px }
+.re-props li { display: grid; gap: 4px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--wl); background: rgba(255, 255, 255, .03); transition: border-color .3s, transform .3s var(--ease) }
+.re-props li:hover { border-color: var(--blue-l); transform: translateY(-2px) }
+.re-props li span { font-family: var(--m); font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: var(--blue-l) }
+.re-props li b { font-weight: 600; font-size: .95rem }
+.re-props li.b { background: var(--blue); border-color: var(--blue) }
+.re-props li.b span { color: rgba(255, 255, 255, .8) }
+.re-peg { gap: 12px }
+.re-peg .peg b { font-size: clamp(1.6rem, 2.4vw, 2.2rem) }
+.re-flow { gap: 16px }
+.re-flow-h { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px }
+.re-path { display: inline-flex; align-items: center; gap: 8px; font-family: var(--m); font-size: .74rem; color: var(--w3) }
+.re-path b { font-weight: 500; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--wl); color: #fff }
+.re-path b.on { background: var(--blue); border-color: var(--blue) }
+.re-flow ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; position: relative }
+.re-flow li { position: relative; display: grid; gap: 6px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--wl); overflow: hidden; animation: restep 8s calc(var(--i) * 2s) infinite }
+.re-flow li::after { content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 0; background: var(--blue); animation: rebar 8s calc(var(--i) * 2s) infinite }
+.re-flow li .n { font-family: var(--m); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--blue-l) }
+.re-flow li b { font-weight: 500; font-size: .95rem }
+@keyframes restep { 0%, 25% { border-color: rgba(126, 160, 255, .55); background: rgba(31, 91, 255, .12) } 30%, 100% { border-color: var(--wl); background: transparent } }
+@keyframes rebar { 0% { width: 0 } 25% { width: 100% } 26%, 100% { width: 0 } }
+@media (max-width: 1080px) { .re-props, .re-flow ol { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+@media (max-width: 480px) { .re-props, .re-flow ol { grid-template-columns: minmax(0, 1fr) } }
+@media (prefers-reduced-motion: reduce) { .re-flow li, .re-flow li::after { animation: none } }
