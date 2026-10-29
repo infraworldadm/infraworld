@@ -29,7 +29,8 @@ export function Staking({ id = "stake" }: { id?: string }) {
       try {
         const r = await fetch("/api/infra/balances", { cache: "no-store" });
         const j = await r.json();
-        if (alive && j?.success) setPool(toReaed(j.data.pools[DIVIDEND.key]));
+        const v = j?.success ? j.data?.pools?.[DIVIDEND.key] : undefined;
+        if (alive && v) setPool(toReaed(v)); // missing/failed → keeps "—"
       } catch {}
     };
     load();

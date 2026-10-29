@@ -59,3 +59,11 @@ html[data-theme="dark"] .pb-card.hl { box-shadow: 0 18px 40px -24px rgba(0, 0, 0
 @media (max-width: 680px) { .pb-grid, .pb-flow ol { grid-template-columns: minmax(0, 1fr) } .pb-flow li:not(:last-child)::after { display: none } .pb-ctrl { width: 100% } .pb-ctrl .refresh { margin-left: auto } }
 .pb-stake .stake-sec { padding-inline: 0; padding-top: var(--gap) }
 .pb-stake .rv { opacity: 1 }
+
+/* Error banner + per-pool failure */
+.pb-err { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 16px; padding: 12px 16px; border-radius: 14px; background: rgba(194, 65, 12, .1); color: #C2410C; font-size: .9rem }
+.pb-err button { flex: none; padding: 7px 14px; border-radius: 999px; border: 1px solid currentColor; background: none; color: inherit; font: inherit; font-size: .8rem; cursor: pointer }
+.pb-err button:disabled { opacity: .6; cursor: default }
+.dark .pb-err { background: rgba(234, 88, 12, .14); color: #FDBA74 }
+.pb-fail { color: #C2410C }
+.dark .pb-fail { color: #FDBA74 }

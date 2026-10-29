@@ -9,7 +9,7 @@ import { Ic, Lbl } from "@/components/common/ui";
 import { POOLS } from "@/config/pools";
 import { Staking } from "@/components/common/Staking";
 
-type Payload = { pools: Record<string, string>; list?: { key: string; address: string; targetPercent: number }[]; updatedAt: string };
+type Payload = { pools: Record<string, string>; list?: { key: string; address: string; targetPercent: number; holding: string | null; error?: string }[]; updatedAt: string };
 const REFRESH_S = 30;
 
 /** Converts a wei string to a reAED number (4-decimal precision, BigInt-safe). */
@@ -63,7 +63,7 @@ function CopyAddr({ address }: { address: string }) {
 /** Live pool balances page. */
 export default function BalancesPage() {
   const [data, setData] = useState<Payload | null>(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [left, setLeft] = useState(REFRESH_S);
   const [hover, setHover] = useState<string | null>(null);
@@ -72,13 +72,17 @@ export default function BalancesPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/infra/balances", { cache: "no-store" });
-      const json = await res.json();
-      if (!res.ok || !json?.success) throw new Error();
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 15000);
+      const res = await fetch("/api/infra/balances", { cache: "no-store", signal: ctrl.signal }).finally(() => clearTimeout(t));
+      const json = await res.json().catch(() => null);
+      if (!res.ok || !json?.success) throw new Error(json?.error || "Could not load pool balances right now. Please try again shortly.");
       setData(json.data);
-      setError(false);
-    } catch {
-      setError(true);
+      setError(null);
+    } catch (e) {
+      // Offline / timeout / API error → readable message; last good values stay on screen.
+      const offline = typeof navigator !== "undefined" && !navigator.onLine;
+      setError(offline ? "You appear to be offline. Check your connection." : e instanceof Error && e.name !== "AbortError" ? e.message : "The network took too long to respond. Retrying automatically.");
     } finally {
       setLoading(false);
       setLeft(REFRESH_S);
@@ -97,7 +101,7 @@ export default function BalancesPage() {
   // Target share + address come live from the DistributionPool contract when available; config is the fallback.
   const rows = POOLS.map((p) => {
     const live = data?.list?.find((l) => l.key === p.key);
-    return { ...p, share: live?.targetPercent ?? p.share, address: live?.address ?? p.address, amount: toReaed(data?.pools[p.key]) };
+    return { ...p, share: live?.targetPercent ?? p.share, address: live?.address ?? p.address, amount: toReaed(data?.pools[p.key]), failed: Boolean(live?.error) };
   });
   const total = rows.reduce((s, r) => s + r.amount, 0);
   const shownTotal = useCountUp(total);
@@ -121,6 +125,13 @@ export default function BalancesPage() {
         </div>
       </div>
 
+      {error && (
+        <div className="pb-err" role="alert">
+          <span>{error}{data ? " Showing last known balances." : ""}</span>
+          <button onClick={load} disabled={loading}>{loading ? "Retrying…" : "Retry"}</button>
+        </div>
+      )}
+
       {/* Total + distribution */}
       <div className="tile dark pb-hero">
         <div className="pb-total">
@@ -128,7 +139,7 @@ export default function BalancesPage() {
           <b className="tn">
             {ready ? fmt(shownTotal) : error ? "Unavailable" : "…"} <small>reAED</small>
           </b>
-          {data && <span className="pb-upd">Updated {new Date(data.updatedAt).toLocaleTimeString()}{error ? " · showing last known values" : ""}</span>}
+          {data && <span className="pb-upd">Updated {new Date(data.updatedAt).toLocaleTimeString()}{rows.some((r) => r.failed) ? " · some pools unavailable" : ""}</span>}
         </div>
 
         <div className="pb-bars">
@@ -179,14 +190,14 @@ export default function BalancesPage() {
                 <span className="pb-share">{r.share}% target</span>
               </div>
               <b className="pb-amt tn">
-                {ready ? fmt(r.amount) : error ? "—" : "…"} <small>reAED</small>
+                {ready && !r.failed ? fmt(r.amount) : error || r.failed ? "—" : "…"} <small>reAED</small>
               </b>
               <div className="pb-prog" aria-label={`${pct.toFixed(1)}% of total, target ${r.share}%`}>
                 <span style={{ width: `${pct}%` }} />
                 <em style={{ left: `${r.share}%` }} title={`Target ${r.share}%`} />
               </div>
               <div className="pb-meta">
-                <span>{ready ? `${pct.toFixed(1)}% of total` : " "}</span>
+                <span className={r.failed ? "pb-fail" : ""}>{r.failed ? "Unavailable" : ready ? `${pct.toFixed(1)}% of total` : " "}</span>
                 <CopyAddr address={r.address} />
               </div>
               <p className="pb-note">{r.note}</p>
