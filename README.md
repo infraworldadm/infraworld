@@ -112,7 +112,7 @@ public/                     Logos (public/Logo), wallet logo (public/wallet), ic
 - **Theme** — `<html data-theme="light|dark">`. A tiny script in `app/layout.tsx` restores the saved choice before paint (no flash). Light is the default.
 - **First paint** — on `/` and `/reaed`, the `<html class="intro">` class hides hero elements until GSAP starts the intro (removed in `Effects.tsx`; 2.5s safety timeout).
 - **Build form emails** — submitted from the browser to [FormSubmit](https://formsubmit.co) → `BUILD_FORM_EMAIL`. The very first submission sends a one-time activation email to that inbox.
-- **Pool balances** — `/api/infra/balances` calls `eth_getBalance` on the INFRA RPC (chain ID 15324) for each pool; the page polls it every 30s.
+- **Pool balances** — `/api/infra/balances` reads `recipients(0..5)` (vault + bps) from the DistributionPool contract, then each vault's balance; Validators uses `ValidatorStaking.rewardReserve()`. Falls back to `config/pools.ts`. The page polls it every 30s.
 - **SEO** — root metadata in `app/layout.tsx`, per-page `metadata` exports, JSON-LD via `components/common/JsonLd.tsx` + `lib/seo.ts`, plus generated sitemap/robots/OG image.
 
 ---

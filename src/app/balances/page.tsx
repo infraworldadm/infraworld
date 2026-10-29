@@ -9,7 +9,7 @@ import { Ic, Lbl } from "@/components/common/ui";
 import { POOLS } from "@/config/pools";
 import { Staking } from "@/components/common/Staking";
 
-type Payload = { pools: Record<string, string>; feeManager: string; updatedAt: string };
+type Payload = { pools: Record<string, string>; list?: { key: string; address: string; targetPercent: number }[]; updatedAt: string };
 const REFRESH_S = 30;
 
 /** Converts a wei string to a reAED number (4-decimal precision, BigInt-safe). */
@@ -94,7 +94,11 @@ export default function BalancesPage() {
   }, []);
   useEffect(() => { if (left === 0 && !loading) load(); }, [left, loading, load]);
 
-  const rows = POOLS.map((p) => ({ ...p, amount: toReaed(data?.pools[p.key]) }));
+  // Target share + address come live from the DistributionPool contract when available; config is the fallback.
+  const rows = POOLS.map((p) => {
+    const live = data?.list?.find((l) => l.key === p.key);
+    return { ...p, share: live?.targetPercent ?? p.share, address: live?.address ?? p.address, amount: toReaed(data?.pools[p.key]) };
+  });
   const total = rows.reduce((s, r) => s + r.amount, 0);
   const shownTotal = useCountUp(total);
   const ready = Boolean(data);
